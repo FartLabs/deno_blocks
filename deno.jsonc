@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "deno.window",
+      "dom"
+    ]
+  },
+  "tasks": {
+    "lock": "deno cache --lock=deno.lock --lock-write main.ts",
+    "udd": "deno run -Ar https://deno.land/x/udd/main.ts main.ts && deno task lock",
+    "build": "deno run -Ar https://deno.land/x/bndl/main.ts --input ./main.ts --output ./static/main.js"
+  }
+}
