@@ -2,7 +2,7 @@
   "version": "3",
   "packages": {
     "specifiers": {
-      "npm:blockly@10.3.0": "npm:blockly@10.3.0"
+      "npm:blockly@11.0.0-beta.1": "npm:blockly@11.0.0-beta.1"
     },
     "npm": {
       "@tootallnate/once@2.0.0": {
@@ -23,8 +23,8 @@
         "integrity": "sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==",
         "dependencies": {}
       },
-      "blockly@10.3.0": {
-        "integrity": "sha512-+95241EVK5o80F3b/iDP61+LfwKwueqscRyh/JfGKPRA4Tlcg8nngu1DdMhOyVCy8Z58AyXuFJ+96+QlCFx5MQ==",
+      "blockly@11.0.0-beta.1": {
+        "integrity": "sha512-ZQ/izoGXPU12WEBC4OvYER1S+yZFEFgEEbrXdC4T4rXjI5U9Yo/pLAddNEDhSbc+krrW7uXLwb2t3NT23UWbtw==",
         "dependencies": {
           "jsdom": "jsdom@22.1.0"
         }

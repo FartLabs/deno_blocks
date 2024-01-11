@@ -1,4 +1,4 @@
-import * as Blockly from "npm:blockly@10.3.0/core";
+import * as Blockly from "npm:blockly@11.0.0-beta.1/core";
 
 console.log("Hello World");
 
