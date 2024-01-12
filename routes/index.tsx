@@ -1,8 +1,6 @@
-import { useSignal } from "@preact/signals";
-import Counter from "../islands/Counter.tsx";
+import TypeScriptBlocklyIsland from "#/islands/typescript_blockly_island.tsx";
 
 export default function Home() {
-  const count = useSignal(3);
   return (
     <div class="">
       <div class="">
@@ -18,7 +16,7 @@ export default function Home() {
           Try updating this message in the
           <code class="">./routes/index.tsx</code> file, and refresh.
         </p>
-        <Counter count={count} />
+        <TypeScriptBlocklyIsland />
       </div>
     </div>
   );

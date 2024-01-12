@@ -8,6 +8,8 @@ export default function App({ Component }: PageProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>deno_subhosting</title>
         <link rel="stylesheet" href="/styles.css" />
+
+        <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
       </head>
       <body>
         <Component />
