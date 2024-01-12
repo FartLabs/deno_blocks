@@ -13,6 +13,7 @@ interface SetupOptions {
  */
 export function setup(options: SetupOptions) {
   // TODO: Replace JSON definitions with TypeScript definitions.
+  // Reference: https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
   const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([{
     type: "object",
     message0: "{ %1 %2 }",
