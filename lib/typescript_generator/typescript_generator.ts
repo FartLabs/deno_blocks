@@ -82,6 +82,9 @@ export function setup(options: SetupOptions) {
   // Register the blocks with Blockly.
   Blockly.common.defineBlocks(blocks);
 
+  // TODO:
+  // https://blocklycodelabs.dev/codelabs/custom-generator/index.html?index=..%2F..index#3
+
   // Inject Blockly.
   const workspace = Blockly.inject(options.blockly, { toolbox });
 
