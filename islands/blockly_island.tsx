@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "preact/hooks";
-import { setup } from "#/lib/typescript_generator/mod.ts";
+import { jsonBlockly } from "#/lib/blockly/examples/json_blockly/mod.ts";
 
 export default function TypeScriptBlocklyIsland() {
   const blocklyRef = useRef<HTMLDivElement>(null);
@@ -10,9 +10,9 @@ export default function TypeScriptBlocklyIsland() {
       return;
     }
 
-    setup({
-      blockly: blocklyRef.current,
-      code: codeRef.current,
+    jsonBlockly({
+      blocklyElement: blocklyRef.current,
+      codeElement: codeRef.current,
     });
   }, [blocklyRef, codeRef]);
 

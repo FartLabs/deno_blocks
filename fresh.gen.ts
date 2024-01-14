@@ -5,7 +5,7 @@
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $index from "./routes/index.tsx";
-import * as $typescript_blockly_island from "./islands/typescript_blockly_island.tsx";
+import * as $blockly_island from "./islands/blockly_island.tsx";
 import { type Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -15,7 +15,7 @@ const manifest = {
     "./routes/index.tsx": $index,
   },
   islands: {
-    "./islands/typescript_blockly_island.tsx": $typescript_blockly_island,
+    "./islands/blockly_island.tsx": $blockly_island,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
