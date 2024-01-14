@@ -7,6 +7,10 @@ interface SetupOptions {
   code: HTMLElement;
 }
 
+enum Order {
+  ATOMIC,
+}
+
 /**
  * @see
  * https://github.com/google/blockly-samples/blob/master/examples/custom-generator-codelab/src/index.js
@@ -79,11 +83,80 @@ export function setup(options: SetupOptions) {
 
   const typescriptGenerator = new Blockly.Generator("TypeScript");
 
+  typescriptGenerator.forBlock["logic_null"] = () => {
+    return ["null", Order.ATOMIC];
+  };
+
+  typescriptGenerator.forBlock["text"] = (block) => {
+    const textValue = block.getFieldValue("TEXT");
+    const code = `"${textValue}"`;
+    return [code, Order.ATOMIC];
+  };
+
+  typescriptGenerator.forBlock["math_number"] = (block) => {
+    const code = String(block.getFieldValue("NUM"));
+    return [code, Order.ATOMIC];
+  };
+
+  typescriptGenerator.forBlock["logic_boolean"] = (block) => {
+    const code = (block.getFieldValue("BOOL") === "TRUE") ? "true" : "false";
+    return [code, Order.ATOMIC];
+  };
+
+  typescriptGenerator.forBlock["member"] = (block, generator) => {
+    const name = block.getFieldValue("MEMBER_NAME");
+    const value = generator.valueToCode(
+      block,
+      "MEMBER_VALUE",
+      Order.ATOMIC,
+    );
+    const code = `"${name}": ${value}`;
+    return code;
+  };
+
+  typescriptGenerator.forBlock["lists_create_with"] = (block, generator) => {
+    const values = [];
+    const itemCount = (block as unknown as { itemCount_: number }).itemCount_;
+    for (let i = 0; i < itemCount; i++) {
+      const valueCode = generator.valueToCode(block, "ADD" + i, Order.ATOMIC);
+      if (valueCode) {
+        values.push(valueCode);
+      }
+    }
+
+    const valueString = values.join(",\n");
+    const indentedValueString = generator.prefixLines(
+      valueString,
+      generator.INDENT,
+    );
+    const codeString = "[\n" + indentedValueString + "\n]";
+    return [codeString, Order.ATOMIC];
+  };
+
+  typescriptGenerator.forBlock["object"] = (block, generator) => {
+    const statementMembers = generator.statementToCode(block, "MEMBERS");
+    const code = "{\n" + statementMembers + "\n}";
+    return [code, Order.ATOMIC];
+  };
+
+  (typescriptGenerator as (typeof typescriptGenerator & {
+    scrub_: typeof typescriptGenerator["scrub_"];
+  })).scrub_ = (
+    block,
+    code,
+    thisOnly,
+  ) => {
+    const nextBlock = block.nextConnection &&
+      block.nextConnection.targetBlock();
+    if (nextBlock && !thisOnly) {
+      return code + ",\n" + typescriptGenerator.blockToCode(nextBlock);
+    }
+
+    return code;
+  };
+
   // Register the blocks with Blockly.
   Blockly.common.defineBlocks(blocks);
-
-  // TODO:
-  // https://blocklycodelabs.dev/codelabs/custom-generator/index.html?index=..%2F..index#3
 
   // Inject Blockly.
   const workspace = Blockly.inject(options.blockly, { toolbox });
@@ -109,6 +182,8 @@ export function setup(options: SetupOptions) {
       return;
     }
 
+    // TODO: Add debounce.
+
     saveWorkspace(workspace);
   });
 
@@ -124,6 +199,8 @@ export function setup(options: SetupOptions) {
     ) {
       return;
     }
+
+    // TODO: Add debounce.
 
     updateCode();
   });
