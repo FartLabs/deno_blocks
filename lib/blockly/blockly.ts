@@ -1,11 +1,10 @@
 import { default as Blockly } from "blockly";
 
-export interface BlocklyOptions {
+export interface BlocklyOptions extends Blockly.BlocklyOptions {
   blocklyElement: HTMLDivElement;
   codeElement?: HTMLElement;
   // deno-lint-ignore no-explicit-any
   blocks: any[];
-  toolbox: Blockly.utils.toolbox.ToolboxDefinition;
   name: string;
   generator(g: Blockly.CodeGenerator): void;
   storageKey?: string;
@@ -64,7 +63,7 @@ export function blockly(options: BlocklyOptions) {
   // Inject Blockly.
   const workspace = Blockly.inject(
     options.blocklyElement,
-    { toolbox: options.toolbox },
+    { ...options },
   );
 
   // Generate code.

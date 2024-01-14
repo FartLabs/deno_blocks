@@ -3,8 +3,16 @@ import { blockly, type BlocklyOptions } from "#/lib/blockly/mod.ts";
 import { storageKey } from "./storage_key.ts";
 
 const TOOLBOX: Blockly.utils.toolbox.ToolboxDefinition = {
+  // TODO: Add categories.
+  // https://developers.google.com/blockly/guides/configure/web/toolbox#categories
   "kind": "flyoutToolbox",
   "contents": [
+    {
+      "kind": "block",
+      "type": "on_http_request",
+    },
+
+    // JSON blocks.
     {
       "kind": "block",
       "type": "object",
@@ -37,6 +45,25 @@ const TOOLBOX: Blockly.utils.toolbox.ToolboxDefinition = {
 };
 
 const BLOCKS = [
+  // TODO: Create function definition block.
+  // TODO: Create call function block with drop down containing function names.
+  // TODO: Create import block.
+  // TODO: Create HTTP request handler block.
+  // TODO: Deploy button.
+  {
+    type: "on_http_request",
+    message0: "async function handle(r: Request) {\n %1 \n}",
+    args0: [
+      {
+        type: "field_multilinetext",
+        name: "CODE",
+        text: "return new Response('Hello, world!');",
+        spellcheck: false,
+      },
+    ],
+    colour: 230,
+    hat: "cap",
+  },
   {
     type: "object",
     message0: "{ %1 %2 }",
@@ -155,6 +182,14 @@ function GENERATOR(g: Blockly.CodeGenerator) {
   };
 }
 
+const THEME = Blockly.Theme.defineTheme("typescript", {
+  // TODO: Update theme.
+  // https://developers.google.com/blockly/guides/configure/web/appearance/themes#built-in
+  "name": "TypeScript",
+  "base": Blockly.Themes.Classic,
+  "startHats": true,
+});
+
 export type TypeScriptBlocklyOptions = Pick<
   BlocklyOptions,
   "blocklyElement" | "codeElement"
@@ -167,6 +202,8 @@ export function typescriptBlockly(options: TypeScriptBlocklyOptions) {
     toolbox: TOOLBOX,
     blocks: BLOCKS,
     generator: GENERATOR,
+    theme: THEME,
     storageKey,
+    trashcan: true,
   });
 }
