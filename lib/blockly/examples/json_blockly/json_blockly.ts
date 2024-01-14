@@ -163,9 +163,9 @@ export type JSONBlocklyOptions = Pick<
 export function jsonBlockly(options: JSONBlocklyOptions) {
   blockly({
     ...options,
+    name: "JSON",
     toolbox: TOOLBOX,
     blocks: BLOCKS,
-    name: "JSON",
     generator: GENERATOR,
     storageKey,
   });
