@@ -18,12 +18,11 @@ export default function TypeScriptBlocklyIsland() {
 
   return (
     <div className="container">
+      <div className="blockly" ref={blocklyRef} />
       <div className="output-pane">
         <pre className="generated-code"><code ref={codeRef}/></pre>
         <div className="output" />
       </div>
-
-      <div className="blockly" ref={blocklyRef} />
     </div>
   );
 }
