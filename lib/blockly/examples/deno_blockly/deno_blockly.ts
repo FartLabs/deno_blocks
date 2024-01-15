@@ -9,64 +9,70 @@ const TOOLBOX: Blockly.utils.toolbox.ToolboxDefinition = {
   "contents": [
     {
       "kind": "block",
-      "type": "on_http_request",
-    },
-
-    // JSON blocks.
-    {
-      "kind": "block",
-      "type": "object",
+      "type": "on_http_request_event",
     },
     {
       "kind": "block",
-      "type": "member",
+      "type": "routed_http_request_event_handler",
     },
     {
       "kind": "block",
-      "type": "math_number",
+      "type": "http_request_event_handler",
     },
     {
       "kind": "block",
-      "type": "text",
+      "type": "on_cron_schedule_event",
     },
-    {
-      "kind": "block",
-      "type": "logic_boolean",
-    },
-    {
-      "kind": "block",
-      "type": "logic_null",
-    },
-    {
-      "kind": "block",
-      "type": "lists_create_with",
-    },
+    // {
+    //   "kind": "block",
+    //   "type": "on_kv_queue_message_event",
+    // },
+    // {
+    //   "kind": "block",
+    //   "type": "on_kv_watch_event",
+    // },
+    // {
+    //   "kind": "block",
+    //   "type": "import_all_as",
+    // },
+    // {
+    //   "kind": "block",
+    //   "type": "import_as",
+    // },
+    // {
+    //   "kind": "block",
+    //   "type": "http_request_handler",
+    // },
+    // {
+    //   "kind": "block",
+    //   "type": "kv_definition",
+    // },
+    // {
+    //   "kind": "block",
+    //   "type": "function_definition",
+    // },
+    // {
+    //   "kind": "block",
+    //   "type": "function_call",
+    // },
   ],
 };
 
 const BLOCKS = [
+  // TODO: Create kv watch event block.
+  // TODO: Create kv queue message event block.
+  // TODO: Create cron schedule event block.
   // TODO: Create function definition block.
   // TODO: Create call function block with drop down containing function names.
   // TODO: Create import block.
+  // TODO: Create global variable assignment block.
+  // TODO: Create kv definition block.
   // TODO: Create HTTP request handler block.
   // TODO: Deploy button.
   {
-    type: "on_http_request",
-    message0: "async function handle(r: Request) {\n %1 \n}",
-    args0: [
-      {
-        type: "field_multilinetext",
-        name: "CODE",
-        text: "return new Response('Hello, world!');",
-        spellcheck: false,
-      },
-    ],
-    colour: 230,
-    hat: "cap",
-  },
-  {
-    type: "object",
-    message0: "{ %1 %2 }",
+    type: "on_http_request_event",
+    message0: "on http request %1 %2",
+    // message0: "async function handle(r: Request) {\n %1 \n}",
     args0: [
       {
         type: "input_dummy",
@@ -76,32 +82,87 @@ const BLOCKS = [
         name: "MEMBERS",
       },
     ],
-    output: null,
     colour: 230,
   },
   {
-    type: "member",
-    message0: "%1 %2 %3",
+    type: "http_request_event_handler",
+    message0: "return await (async (request: Request) => {\n %1 \n})(request);",
     args0: [
       {
+        type: "field_multilinetext",
+        name: "CODE",
+        text: "return new Response('Hello, world!');",
+        spellcheck: false,
+      },
+    ],
+    colour: 230,
+    previousStatement: null,
+    nextStatement: null,
+  },
+  {
+    type: "routed_http_request_event_handler",
+    colour: 230,
+    message0: "method: %1 path: %2 %3 %4",
+    args0: [
+      {
+        type: "field_dropdown",
+        name: "METHOD",
+        options: [
+          ["GET", "GET"],
+          ["POST", "POST"],
+          ["PUT", "PUT"],
+          ["PATCH", "PATCH"],
+          ["DELETE", "DELETE"],
+          ["OPTIONS", "OPTIONS"],
+          ["HEAD", "HEAD"],
+        ],
+      },
+      {
         type: "field_input",
-        name: "MEMBER_NAME",
-        text: "",
+        name: "PATH",
+        text: "/",
       },
       {
-        type: "field_label",
-        name: "COLON",
-        text: ":",
+        type: "input_dummy",
       },
       {
-        type: "input_value",
-        name: "MEMBER_VALUE",
+        type: "input_statement",
+        name: "MEMBERS",
       },
     ],
     previousStatement: null,
     nextStatement: null,
-    colour: 230,
   },
+  {
+    type: "on_cron_schedule_event",
+    message0: "on cron schedule %1 %2",
+    args0: [
+      {
+        type: "field_input",
+        name: "CRON_SCHEDULE",
+        text: "* * * * *",
+      },
+      {
+        type: "input_statement",
+        name: "CODE",
+      },
+    ],
+  },
+  // {
+  //   type: "function_definition",
+  //   message0: "function %1 %2",
+  //   args0: [
+  //     {
+  //       type: "field_input",
+  //       name: "FUNCTION_NAME",
+  //       text: "handle",
+  //     },
+  //     {
+  //       type: "input_statement",
+  //       name: "CODE",
+  //     },
+  //   ],
+  // },
 ];
 
 enum Order {
@@ -182,23 +243,23 @@ function GENERATOR(g: Blockly.CodeGenerator) {
   };
 }
 
-const THEME = Blockly.Theme.defineTheme("typescript", {
+const THEME = Blockly.Theme.defineTheme("deno", {
   // TODO: Update theme.
   // https://developers.google.com/blockly/guides/configure/web/appearance/themes#built-in
-  "name": "TypeScript",
+  "name": "Deno",
   "base": Blockly.Themes.Classic,
   "startHats": true,
 });
 
-export type TypeScriptBlocklyOptions = Pick<
+export type DenoBlocklyOptions = Pick<
   BlocklyOptions,
   "blocklyElement" | "codeElement"
 >;
 
-export function typescriptBlockly(options: TypeScriptBlocklyOptions) {
+export function denoBlockly(options: DenoBlocklyOptions) {
   blockly({
     ...options,
-    name: "TypeScript",
+    name: "Deno",
     toolbox: TOOLBOX,
     blocks: BLOCKS,
     generator: GENERATOR,
