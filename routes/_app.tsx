@@ -10,9 +10,6 @@ export default function App({ Component }: PageProps) {
         <link rel="stylesheet" href="/styles.css" />
 
         <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.5/split.min.js">
-        </script>
-        <script src="/ide_splitter.js"></script>
       </head>
       <body>
         <Component />
