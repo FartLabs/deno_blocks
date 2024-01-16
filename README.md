@@ -1,4 +1,4 @@
-<img style="float: right;" src="./static/deno-blocks-icon.gif" width="256px" />
+<img align="right" src="static/deno-blocks-icon.gif" width="256px" title="Credit: @_tanakaworld">
 
 # Deno Blocks
 
