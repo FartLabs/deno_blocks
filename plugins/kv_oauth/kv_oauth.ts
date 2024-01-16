@@ -5,7 +5,7 @@ const { signIn, handleCallback, signOut, getSessionId } = createHelpers(
   createGitHubOAuthConfig(),
 );
 
-export const kvOAuthPlugin = (): Plugin => ({
+export const kvOAuthPlugin = (_kv: Deno.Kv): Plugin => ({
   name: "kv-oauth",
   routes: [
     {
@@ -19,6 +19,9 @@ export const kvOAuthPlugin = (): Plugin => ({
       async handler(req) {
         // Return object also includes `accessToken` and `sessionId` properties.
         const { response } = await handleCallback(req);
+
+        // TODO: See if I need to store the access token in KV manually.
+
         return response;
       },
     },

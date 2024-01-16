@@ -1,7 +1,15 @@
 import { useEffect, useRef } from "preact/hooks";
-import { denoBlockly } from "#/lib/blockly/examples/deno_blockly/mod.ts";
+import {
+  denoBlockly,
+  type DenoBlocklyOptions,
+} from "#/lib/blockly/examples/deno_blockly/mod.ts";
 
-export default function BlocklyIsland() {
+export type DenoBlocksIDEIslandProps = Pick<
+  DenoBlocklyOptions,
+  "getInitialWorkspace" | "onWorkspaceChange"
+>;
+
+export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
   const blocklyRef = useRef<HTMLDivElement>(null);
   const codeRef = useRef<HTMLElement>(null);
 
@@ -13,6 +21,8 @@ export default function BlocklyIsland() {
     denoBlockly({
       blocklyElement: blocklyRef.current,
       codeElement: codeRef.current,
+      getInitialWorkspace: props.getInitialWorkspace,
+      onWorkspaceChange: props.onWorkspaceChange,
     });
   }, [blocklyRef, codeRef]);
 

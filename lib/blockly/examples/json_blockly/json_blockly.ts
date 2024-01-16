@@ -1,5 +1,10 @@
 import { default as Blockly } from "blockly";
-import { blockly, type BlocklyOptions } from "#/lib/blockly/mod.ts";
+import {
+  blockly,
+  type BlocklyOptions,
+  getWorkspace,
+  setWorkspace,
+} from "#/lib/blockly/mod.ts";
 import { storageKey } from "./storage_key.ts";
 
 const TOOLBOX: Blockly.utils.toolbox.ToolboxDefinition = {
@@ -157,7 +162,7 @@ function GENERATOR(g: Blockly.CodeGenerator) {
 
 export type JSONBlocklyOptions = Pick<
   BlocklyOptions,
-  "blocklyElement" | "codeElement"
+  "blocklyElement" | "codeElement" | "getInitialWorkspace" | "onWorkspaceChange"
 >;
 
 export function jsonBlockly(options: JSONBlocklyOptions) {
@@ -167,6 +172,9 @@ export function jsonBlockly(options: JSONBlocklyOptions) {
     toolbox: TOOLBOX,
     blocks: BLOCKS,
     generator: GENERATOR,
-    storageKey,
+    getInitialWorkspace: options.getInitialWorkspace ??
+      (() => getWorkspace(storageKey)),
+    onWorkspaceChange: options.onWorkspaceChange ??
+      ((workspace) => setWorkspace(storageKey, workspace)),
   });
 }

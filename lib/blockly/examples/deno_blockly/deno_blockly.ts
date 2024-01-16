@@ -1,5 +1,10 @@
 import { default as Blockly } from "blockly";
-import { blockly, type BlocklyOptions } from "#/lib/blockly/mod.ts";
+import {
+  blockly,
+  type BlocklyOptions,
+  getWorkspace,
+  setWorkspace,
+} from "#/lib/blockly/mod.ts";
 import { storageKey } from "./storage_key.ts";
 
 const TOOLBOX: Blockly.utils.toolbox.ToolboxDefinition = {
@@ -253,7 +258,7 @@ const THEME = Blockly.Theme.defineTheme("deno", {
 
 export type DenoBlocklyOptions = Pick<
   BlocklyOptions,
-  "blocklyElement" | "codeElement"
+  "blocklyElement" | "codeElement" | "getInitialWorkspace" | "onWorkspaceChange"
 >;
 
 export function denoBlockly(options: DenoBlocklyOptions) {
@@ -264,7 +269,10 @@ export function denoBlockly(options: DenoBlocklyOptions) {
     blocks: BLOCKS,
     generator: GENERATOR,
     theme: THEME,
-    storageKey,
+    getInitialWorkspace: options.getInitialWorkspace ??
+      (() => getWorkspace(storageKey)),
+    onWorkspaceChange: options.onWorkspaceChange ??
+      ((workspace) => setWorkspace(storageKey, workspace)),
     trashcan: true,
   });
 }
