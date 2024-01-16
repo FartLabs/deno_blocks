@@ -19,6 +19,7 @@
     "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.0",
     "$std/": "https://deno.land/std@0.208.0/",
     "blockly": "https://esm.sh/blockly@10.3.0",
+    "@blockly/theme-dark": "https://esm.sh/@blockly/theme-dark@6.0.5",
     "deno_kv_oauth/": "https://deno.land/x/deno_kv_oauth@v0.10.0/",
     "#/": "./"
   },

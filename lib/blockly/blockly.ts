@@ -3,10 +3,12 @@ import { default as Blockly } from "blockly";
 export interface BlocklyOptions extends Blockly.BlocklyOptions {
   blocklyElement: HTMLDivElement;
   codeElement?: HTMLElement;
-  // deno-lint-ignore no-explicit-any
-  blocks: any[];
   name: string;
-  generator: (g: Blockly.CodeGenerator) => void;
+  // deno-lint-ignore no-explicit-any
+  getBlocks: () => any[];
+  getToolbox: () => Blockly.utils.toolbox.ToolboxDefinition;
+  getTheme?: () => Blockly.Theme;
+  getGenerator?: () => (g: Blockly.CodeGenerator) => void;
   getInitialWorkspace?: () => Blockly.Workspace | undefined;
   onWorkspaceChange?: (workspace: Blockly.Workspace) => void;
 }
@@ -44,19 +46,23 @@ export function getWorkspace(
 export function blockly(options: BlocklyOptions) {
   // Reference: https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
   const blocks = Blockly.common.createBlockDefinitionsFromJsonArray(
-    options.blocks,
+    options.getBlocks() ?? [],
   );
-
-  const generator = new Blockly.Generator(options.name);
-  options.generator(generator);
 
   // Register the blocks with Blockly.
   Blockly.common.defineBlocks(blocks);
 
+  const generator = new Blockly.Generator(options.name);
+  if (options.getGenerator) {
+    options.getGenerator()(generator);
+  }
+
   // Inject Blockly.
+  const toolbox = options.getToolbox();
+  const theme = options.getTheme?.() ?? Blockly.Themes.Classic;
   const workspace = Blockly.inject(
     options.blocklyElement,
-    { ...options },
+    { ...options, toolbox, theme },
   );
 
   // Generate code.

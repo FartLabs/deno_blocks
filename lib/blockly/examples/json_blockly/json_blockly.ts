@@ -7,41 +7,42 @@ import {
 } from "#/lib/blockly/mod.ts";
 import { storageKey } from "./storage_key.ts";
 
-const TOOLBOX: Blockly.utils.toolbox.ToolboxDefinition = {
-  "kind": "flyoutToolbox",
-  "contents": [
-    {
-      "kind": "block",
-      "type": "object",
-    },
-    {
-      "kind": "block",
-      "type": "member",
-    },
-    {
-      "kind": "block",
-      "type": "math_number",
-    },
-    {
-      "kind": "block",
-      "type": "text",
-    },
-    {
-      "kind": "block",
-      "type": "logic_boolean",
-    },
-    {
-      "kind": "block",
-      "type": "logic_null",
-    },
-    {
-      "kind": "block",
-      "type": "lists_create_with",
-    },
-  ],
-};
+const GET_JSON_BLOCKLY_TOOLBOX =
+  (): Blockly.utils.toolbox.ToolboxDefinition => ({
+    "kind": "flyoutToolbox",
+    "contents": [
+      {
+        "kind": "block",
+        "type": "object",
+      },
+      {
+        "kind": "block",
+        "type": "member",
+      },
+      {
+        "kind": "block",
+        "type": "math_number",
+      },
+      {
+        "kind": "block",
+        "type": "text",
+      },
+      {
+        "kind": "block",
+        "type": "logic_boolean",
+      },
+      {
+        "kind": "block",
+        "type": "logic_null",
+      },
+      {
+        "kind": "block",
+        "type": "lists_create_with",
+      },
+    ],
+  });
 
-const BLOCKS = [
+const GET_JSON_BLOCKLY_BLOCKS = () => [
   {
     type: "object",
     message0: "{ %1 %2 }",
@@ -86,7 +87,7 @@ enum Order {
   ATOMIC,
 }
 
-function GENERATOR(g: Blockly.CodeGenerator) {
+const GET_JSON_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
   g.forBlock["logic_null"] = () => {
     return ["null", Order.ATOMIC];
   };
@@ -158,7 +159,7 @@ function GENERATOR(g: Blockly.CodeGenerator) {
 
     return code;
   };
-}
+};
 
 export type JSONBlocklyOptions = Pick<
   BlocklyOptions,
@@ -169,9 +170,9 @@ export function jsonBlockly(options: JSONBlocklyOptions) {
   blockly({
     ...options,
     name: "JSON",
-    toolbox: TOOLBOX,
-    blocks: BLOCKS,
-    generator: GENERATOR,
+    getToolbox: GET_JSON_BLOCKLY_TOOLBOX,
+    getBlocks: GET_JSON_BLOCKLY_BLOCKS,
+    getGenerator: GET_JSON_BLOCKLY_GENERATOR,
     getInitialWorkspace: options.getInitialWorkspace ??
       (() => getWorkspace(storageKey)),
     onWorkspaceChange: options.onWorkspaceChange ??

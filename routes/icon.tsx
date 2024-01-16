@@ -1,6 +1,15 @@
 import DenoBlocksIcon from "#/components/deno_blocks_icon.tsx";
 
-export default function Icon(_request: Request) {
-  // TODO: Load workspace from Deno KV by session ID.
-  return <DenoBlocksIcon size="min(50vw, 50vh)" />;
+export default function DenoBlocksIconPage() {
+  return (
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+      <div>
+        <DenoBlocksIcon size="min(50vw, 50vh)" />
+        <br />
+        <p style="font-size: 2rem; font-weight: bold; text-align: center;">
+          Credit: <a href="<https://twitter.com/_tanakaworld">@_tanakaworld</a>
+        </p>
+      </div>
+    </div>
+  );
 }

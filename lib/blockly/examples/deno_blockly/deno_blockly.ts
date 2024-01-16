@@ -5,65 +5,67 @@ import {
   getWorkspace,
   setWorkspace,
 } from "#/lib/blockly/mod.ts";
+import { DarkTheme } from "#/lib/blockly/dark_theme.ts";
 import { storageKey } from "./storage_key.ts";
 
-const TOOLBOX: Blockly.utils.toolbox.ToolboxDefinition = {
-  // TODO: Add categories.
-  // https://developers.google.com/blockly/guides/configure/web/toolbox#categories
-  "kind": "flyoutToolbox",
-  "contents": [
-    {
-      "kind": "block",
-      "type": "on_http_request_event",
-    },
-    {
-      "kind": "block",
-      "type": "routed_http_request_event_handler",
-    },
-    {
-      "kind": "block",
-      "type": "http_request_event_handler",
-    },
-    {
-      "kind": "block",
-      "type": "on_cron_schedule_event",
-    },
-    // {
-    //   "kind": "block",
-    //   "type": "on_kv_queue_message_event",
-    // },
-    // {
-    //   "kind": "block",
-    //   "type": "on_kv_watch_event",
-    // },
-    // {
-    //   "kind": "block",
-    //   "type": "import_all_as",
-    // },
-    // {
-    //   "kind": "block",
-    //   "type": "import_as",
-    // },
-    // {
-    //   "kind": "block",
-    //   "type": "http_request_handler",
-    // },
-    // {
-    //   "kind": "block",
-    //   "type": "kv_definition",
-    // },
-    // {
-    //   "kind": "block",
-    //   "type": "function_definition",
-    // },
-    // {
-    //   "kind": "block",
-    //   "type": "function_call",
-    // },
-  ],
-};
+const GET_DENO_BLOCKLY_TOOLBOX =
+  (): Blockly.utils.toolbox.ToolboxDefinition => ({
+    // TODO: Add categories.
+    // https://developers.google.com/blockly/guides/configure/web/toolbox#categories
+    "kind": "flyoutToolbox",
+    "contents": [
+      {
+        "kind": "block",
+        "type": "on_http_request_event",
+      },
+      {
+        "kind": "block",
+        "type": "routed_http_request_event_handler",
+      },
+      {
+        "kind": "block",
+        "type": "http_request_event_handler",
+      },
+      {
+        "kind": "block",
+        "type": "on_cron_schedule_event",
+      },
+      // {
+      //   "kind": "block",
+      //   "type": "on_kv_queue_message_event",
+      // },
+      // {
+      //   "kind": "block",
+      //   "type": "on_kv_watch_event",
+      // },
+      // {
+      //   "kind": "block",
+      //   "type": "import_all_as",
+      // },
+      // {
+      //   "kind": "block",
+      //   "type": "import_as",
+      // },
+      // {
+      //   "kind": "block",
+      //   "type": "http_request_handler",
+      // },
+      // {
+      //   "kind": "block",
+      //   "type": "kv_definition",
+      // },
+      // {
+      //   "kind": "block",
+      //   "type": "function_definition",
+      // },
+      // {
+      //   "kind": "block",
+      //   "type": "function_call",
+      // },
+    ],
+  });
 
-const BLOCKS = [
+const GET_DENO_BLOCKLY_BLOCKS = () => [
   // TODO: Create kv watch event block.
   // TODO: Create kv queue message event block.
   // TODO: Create cron schedule event block.
@@ -174,7 +176,7 @@ enum Order {
   ATOMIC,
 }
 
-function GENERATOR(g: Blockly.CodeGenerator) {
+const GET_DENO_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
   g.forBlock["logic_null"] = () => {
     return ["null", Order.ATOMIC];
   };
@@ -246,15 +248,19 @@ function GENERATOR(g: Blockly.CodeGenerator) {
 
     return code;
   };
-}
+};
 
-const THEME = Blockly.Theme.defineTheme("deno", {
-  // TODO: Update theme.
-  // https://developers.google.com/blockly/guides/configure/web/appearance/themes#built-in
-  "name": "Deno",
-  "base": Blockly.Themes.Classic,
-  "startHats": true,
-});
+const GET_DENO_BLOCKLY_THEME = () => {
+  const prefersDark = window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const theme = prefersDark ? DarkTheme : Blockly.Themes.Classic;
+
+  // Customize theme.
+  // https://developers.google.com/blockly/guides/configure/web/appearance/themes#create_a_theme
+  theme.name = "Deno";
+  theme.startHats = true;
+  return theme;
+};
 
 export type DenoBlocklyOptions = Pick<
   BlocklyOptions,
@@ -265,10 +271,10 @@ export function denoBlockly(options: DenoBlocklyOptions) {
   blockly({
     ...options,
     name: "Deno",
-    toolbox: TOOLBOX,
-    blocks: BLOCKS,
-    generator: GENERATOR,
-    theme: THEME,
+    getToolbox: GET_DENO_BLOCKLY_TOOLBOX,
+    getBlocks: GET_DENO_BLOCKLY_BLOCKS,
+    getGenerator: GET_DENO_BLOCKLY_GENERATOR,
+    getTheme: GET_DENO_BLOCKLY_THEME,
     getInitialWorkspace: options.getInitialWorkspace ??
       (() => getWorkspace(storageKey)),
     onWorkspaceChange: options.onWorkspaceChange ??
