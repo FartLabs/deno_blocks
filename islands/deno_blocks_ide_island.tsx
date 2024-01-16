@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "preact/hooks";
 import { denoBlockly } from "#/lib/blockly/examples/deno_blockly/mod.ts";
 import DenoBlocksIcon from "#/components/deno_blocks_icon.tsx";
-import { type SubhostingAPIProject } from "#/lib/subhosting_api/mod.ts";
+import type { SubhostingAPIProject } from "#/lib/subhosting_api/mod.ts";
 
 export default function DenoBlocksIDEIsland() {
   const blocklyRef = useRef<HTMLDivElement>(null);
+  const outputPanelRef = useRef<HTMLDivElement>(null);
   const codeRef = useRef<HTMLElement>(null);
 
   // TODO: Load workspace from Deno KV by session ID. Listen for server-sent
@@ -26,11 +27,15 @@ export default function DenoBlocksIDEIsland() {
       throw new Error("codeRef.current is null");
     }
 
+    // Test.
+    codeRef.current.innerText = "console.log('Hello, world!');";
+
+    // Set up Deno Blockly.
     denoBlockly({
       blocklyElement: blocklyRef.current,
       codeElement: codeRef.current,
     });
-  }, [blocklyRef, codeRef]);
+  }, [blocklyRef, outputPanelRef, codeRef]);
 
   return (
     <>
@@ -57,9 +62,13 @@ export default function DenoBlocksIDEIsland() {
         </div>
       </nav>
       <main>
-        <div className="container">
-          <div className="blockly" ref={blocklyRef} />
-          <div className="output-pane">
+        {/* TODO: Define panels */}
+        <div className="panel-container">
+          <div className="blockly-panel">
+            <div className="blockly" ref={blocklyRef} />
+          </div>
+
+          <div className="output-panel" ref={outputPanelRef}>
             <pre className="generated-code"><code ref={codeRef}/></pre>
             <div className="output" />
           </div>

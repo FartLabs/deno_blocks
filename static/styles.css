@@ -110,44 +110,92 @@ form {
   display: inline-block;
 }
 
-.container {
+.panel-container {
   display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+
+  /* display: flex;
   width: 100%;
   max-width: 100vw;
-  height: 100vh;
+  height: 100vh; */
+
+  /* height: 100%;
+  width: 100vw;
+  background: #333;
+  border: 6px solid #666;
+  display: flex; */
+}
+
+.gutter {
+  background-color: #eee;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.gutter.gutter-horizontal {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+  cursor: col-resize;
+  float: left;
+}
+
+.blockly-panel {
+  /* padding: 1em; */
+  color: #fff;
+  min-width: 200px;
+  background-color: aquamarine;
+  box-sizing: border-box;
+  float: left;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
 }
 
 .blockly {
-  flex-basis: 100%;
+  /* flex-basis: 100%; */
   height: 100%;
-  min-width: 600px;
-  position: absolute;
-  right: 30%;
+  width: 100%;
+  /* min-width: 600px; */
+  /* position: absolute; */
+  /* position: relative; */
+  /* right: 0;
   top: 0;
   left: 0;
-  bottom: 0;
-  overflow: hidden;
+  bottom: 0; */
+  /* overflow: hidden; */
 }
 
-.output-pane {
-  display: flex;
+.output-panel {
+  padding: 1em;
+  color: #fff;
+  min-width: 200px;
+  position: relative;
+  background-color: aqua;
+  box-sizing: border-box;
+  float: left;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+
+  /* display: flex;
   flex-direction: column;
   flex: 0 0 400px;
   overflow: auto;
   margin: 1rem;
   position: absolute;
   width: 30%;
+  height: 100%;
   right: 0;
   overflow: auto;
-  border-left: 1px solid #555;
+  border-left: 1px solid #555; */
 }
 
 .generated-code {
-  height: 50%;
-  background-color: rgb(247, 240, 228);
+  background-color: #00ff00;
 }
 
-.output {
+/*.output {
   height: 50%;
 }
 
@@ -155,4 +203,4 @@ form {
   transition-property: background-color, border-color, color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
-}
+} */
