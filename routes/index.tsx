@@ -3,9 +3,5 @@ import DenoBlocksIDEIsland from "#/islands/deno_blocks_ide_island.tsx";
 
 export default /*async*/ function Home(_request: Request) {
   // TODO: Load workspace from Deno KV by session ID.
-  return (
-    <main>
-      <DenoBlocksIDEIsland />
-    </main>
-  );
+  return <DenoBlocksIDEIsland />;
 }

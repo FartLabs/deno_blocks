@@ -1,3 +1,6 @@
+:root {
+  --nav-height: 42px;
+}
 
 *,
 *::before,
@@ -7,13 +10,13 @@
 
 * {
   margin: 0;
-
 }
 button {
   color: inherit;
 }
 
-button, [role="button"] {
+button,
+[role="button"] {
   cursor: pointer;
 }
 
@@ -42,6 +45,71 @@ html {
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+.deno-blocks-icon {
+  background-image: url("/deno-blocks-icon-frame-0.gif");
+  width: var(--nav-height);
+  height: var(--nav-height);
+  image-rendering: pixelated;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.deno-blocks-icon:hover {
+  background-image: url("/deno-blocks-icon.gif");
+}
+
+nav {
+  position: absolute;
+  height: var(--nav-height);
+  top: 0;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #555;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow: hidden;
+}
+
+main {
+  position: absolute;
+  top: var(--nav-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+h1 {
+  display: inline-block;
+  margin: 0 0 0 10px;
+  padding: 0;
+  font-size: 28px;
+}
+
+h3 {
+  font-size: 22px;
+  margin: 10px;
+  padding: 0;
+}
+
+select,
+button {
+  height: 28px;
+}
+
+form {
+  display: inline;
+}
+
+#project-list {
+  margin-right: 10px;
+}
+
+#project-selector {
+  display: inline-block;
+}
+
 .container {
   display: flex;
   width: 100%;
@@ -53,15 +121,25 @@ html {
   flex-basis: 100%;
   height: 100%;
   min-width: 600px;
+  position: absolute;
+  right: 30%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow: hidden;
 }
 
 .output-pane {
   display: flex;
   flex-direction: column;
-  width: 400px;
   flex: 0 0 400px;
   overflow: auto;
   margin: 1rem;
+  position: absolute;
+  width: 30%;
+  right: 0;
+  overflow: auto;
+  border-left: 1px solid #555;
 }
 
 .generated-code {
@@ -71,7 +149,7 @@ html {
 
 .output {
   height: 50%;
- }
+}
 
 .transition-colors {
   transition-property: background-color, border-color, color, fill, stroke;
