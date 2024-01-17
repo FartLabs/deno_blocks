@@ -8,83 +8,121 @@ import {
 import { DarkTheme } from "#/lib/blockly/dark_theme.ts";
 import { storageKey } from "./storage_key.ts";
 
+// TODO: Fix Blockly code generation.
+
+// Blockly colours:
+// https://developers.google.com/blockly/guides/create-custom-blocks/block-colour
+const HTTP_COLOUR = "0";
+const CRON_COLOUR = "270";
+const DISCORD_COLOUR = "#5865F2"; // Blurple.
+
 const GET_DENO_BLOCKLY_TOOLBOX =
-  (): Blockly.utils.toolbox.ToolboxDefinition => ({
-    // TODO: Add categories.
-    // https://developers.google.com/blockly/guides/configure/web/toolbox#categories
-    "kind": "categoryToolbox",
-    "contents": [
-      {
-        "kind": "category",
-        "name": "HTTP",
-        "contents": [
-          {
-            "kind": "block",
-            "type": "on_http_request_event",
-          },
-          {
-            "kind": "block",
-            "type": "routed_http_request_event_handler",
-          },
-          {
-            "kind": "block",
-            "type": "http_error_handler",
-          },
-          {
-            "kind": "block",
-            "type": "http_request_event_handler",
-          },
-        ],
-      },
-      {
-        "kind": "category",
-        "name": "Cron",
-        "contents": [
-          {
-            "kind": "block",
-            "type": "on_cron_schedule_event",
-          },
-          {
-            "kind": "block",
-            "type": "cron_schedule_event_handler",
-          },
-        ],
-      },
-      //
-      // {
-      //   "kind": "block",
-      //   "type": "on_kv_queue_message_event",
-      // },
-      // {
-      //   "kind": "block",
-      //   "type": "on_kv_watch_event",
-      // },
-      // {
-      //   "kind": "block",
-      //   "type": "import_all_as",
-      // },
-      // {
-      //   "kind": "block",
-      //   "type": "import_as",
-      // },
-      // {
-      //   "kind": "block",
-      //   "type": "http_request_handler",
-      // },
-      // {
-      //   "kind": "block",
-      //   "type": "kv_definition",
-      // },
-      // {
-      //   "kind": "block",
-      //   "type": "function_definition",
-      // },
-      // {
-      //   "kind": "block",
-      //   "type": "function_call",
-      // },
-    ],
-  });
+  (): Blockly.utils.toolbox.ToolboxDefinition => {
+    return {
+      "kind": "categoryToolbox",
+      "contents": [
+        {
+          "kind": "category",
+          "name": "HTTP",
+          "colour": HTTP_COLOUR,
+          "contents": [
+            {
+              "kind": "block",
+              "type": "on_http_request_event",
+            },
+            {
+              "kind": "block",
+              "type": "http_request_event_method_handler",
+            },
+            {
+              "kind": "block",
+              "type": "http_request_event_pathname_handler",
+            },
+            {
+              "kind": "block",
+              "type": "http_request_event_handler",
+            },
+          ],
+        },
+        {
+          "kind": "category",
+          "name": "Cron",
+          "colour": CRON_COLOUR,
+          "contents": [
+            {
+              "kind": "block",
+              "type": "on_cron_schedule_event",
+            },
+            {
+              "kind": "block",
+              "type": "cron_schedule_event_handler",
+            },
+          ],
+        },
+        {
+          "kind": "category",
+          "name": "Discord",
+          "colour": DISCORD_COLOUR,
+          "contents": [
+            {
+              "kind": "block",
+              "type": "on_discord_message_interaction_event",
+            },
+            {
+              "kind": "block",
+              "type": "discord_message_interaction_event_handler",
+            },
+            {
+              "kind": "block",
+              "type": "on_discord_user_interaction_event",
+            },
+            {
+              "kind": "block",
+              "type": "discord_user_interaction_event_handler",
+            },
+          ],
+        },
+        // TODO: Add Kv watch category.
+        // TODO: Add Kv queues category.
+        // TODO: Add mapper block that is a function that maps one type to another.
+        //
+
+        //
+        // {
+        //   "kind": "block",
+        //   "type": "on_kv_queue_message_event",
+        // },
+        // {
+        //   "kind": "block",
+        //   "type": "on_kv_watch_event",
+        // },
+        // {
+        //   "kind": "block",
+        //   "type": "import_all_as",
+        // },
+        // {
+        //   "kind": "block",
+        //   "type": "import_as",
+        // },
+        // {
+        //   "kind": "block",
+        //   "type": "http_request_handler",
+        // },
+        // {
+        //   "kind": "block",
+        //   "type": "kv_definition",
+        // },
+        // {
+        //   "kind": "block",
+        //   "type": "function_definition",
+        // },
+        // {
+        //   "kind": "block",
+        //   "type": "function_call",
+        // },
+      ],
+    };
+  };
 
 const GET_DENO_BLOCKLY_BLOCKS = () => [
   // TODO: Create kv watch event block.
@@ -97,10 +135,12 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
   // TODO: Create kv definition block.
   // TODO: Create HTTP request handler block.
   // TODO: Deploy button.
+
+  // HTTP blocks.
   {
     type: "on_http_request_event",
+    colour: HTTP_COLOUR,
     message0: "on http request %1 %2",
-    // message0: "async function handle(r: Request) {\n %1 \n}",
     args0: [
       {
         type: "input_dummy",
@@ -110,11 +150,11 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
         name: "MEMBERS",
       },
     ],
-    colour: 230,
   },
   {
     type: "http_request_event_handler",
-    message0: "return await (async (request: Request) => {\n %1 \n})(request);",
+    colour: HTTP_COLOUR,
+    message0: "(request: Request) => {\n %1 \n}",
     args0: [
       {
         type: "field_multilinetext",
@@ -123,14 +163,13 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
         spellcheck: false,
       },
     ],
-    colour: 230,
     previousStatement: null,
     nextStatement: null,
   },
   {
-    type: "routed_http_request_event_handler",
-    colour: 230,
-    message0: "method: %1 path: %2 %3 %4",
+    type: "http_request_event_method_handler",
+    colour: HTTP_COLOUR,
+    message0: "if method is %1 %2 %3",
     args0: [
       {
         type: "field_dropdown",
@@ -145,6 +184,22 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
           ["HEAD", "HEAD"],
         ],
       },
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "input_statement",
+        name: "MEMBERS",
+      },
+    ],
+    previousStatement: null,
+    nextStatement: null,
+  },
+  {
+    type: "http_request_event_pathname_handler",
+    colour: HTTP_COLOUR,
+    message0: "if pathname matches %1 %2 %3",
+    args0: [
       {
         type: "field_input",
         name: "PATH",
@@ -161,9 +216,12 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
     previousStatement: null,
     nextStatement: null,
   },
+
+  // Cron blocks.
   {
     type: "on_cron_schedule_event",
-    message0: "on cron schedule %1 %2",
+    colour: CRON_COLOUR,
+    message0: "on cron schedule %1\nname: %2\n %3",
     args0: [
       {
         type: "field_input",
@@ -171,26 +229,110 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
         text: "* * * * *",
       },
       {
+        type: "field_input",
+        name: "NAME",
+        text: "",
+      },
+      {
         type: "input_statement",
         name: "CODE",
       },
     ],
   },
-  // {
-  //   type: "function_definition",
-  //   message0: "function %1 %2",
-  //   args0: [
-  //     {
-  //       type: "field_input",
-  //       name: "FUNCTION_NAME",
-  //       text: "handle",
-  //     },
-  //     {
-  //       type: "input_statement",
-  //       name: "CODE",
-  //     },
-  //   ],
-  // },
+  {
+    type: "cron_schedule_event_handler",
+    colour: CRON_COLOUR,
+    message0: "() => {\n %1 \n}",
+    args0: [
+      {
+        type: "field_multilinetext",
+        name: "CODE",
+        text: "console.log('Hello, world!');",
+        spellcheck: false,
+      },
+    ],
+    previousStatement: null,
+    nextStatement: null,
+  },
+
+  // Discord blocks.
+  {
+    type: "on_discord_message_interaction_event",
+    colour: DISCORD_COLOUR,
+    message0: "on discord message interaction %1 %2",
+    args0: [
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "input_statement",
+        name: "CODE",
+      },
+    ],
+  },
+  {
+    type: "discord_message_interaction_event_handler",
+    colour: DISCORD_COLOUR,
+    message0:
+      "(interaction: APIMessageApplicationCommandInteraction) => {\n %1 \n}",
+    args0: [
+      {
+        type: "field_multilinetext",
+        name: "CODE",
+        text: `const message =
+  interaction.data.resolved.messages[interaction.data.target_id];
+const messageURL =
+  \`https://discord.com/channels/\${interaction.guild_id}/\${message.channel_id}/\${message.id}\`;
+return {
+  type: InteractionResponseType.ChannelMessageWithSource,
+  data: {
+    content:
+      \`Bookmarked \${messageURL} for <@\${interaction.member?.user.id}>!\`,
+  },
+};`,
+      },
+    ],
+    previousStatement: null,
+    nextStatement: null,
+  },
+  {
+    type: "on_discord_user_interaction_event",
+    colour: DISCORD_COLOUR,
+    message0: "on discord user interaction %1 %2",
+    args0: [
+      {
+        type: "input_dummy",
+      },
+      {
+        type: "input_statement",
+        name: "CODE",
+      },
+    ],
+  },
+  {
+    type: "discord_user_interaction_event_handler",
+    colour: DISCORD_COLOUR,
+    message0:
+      "(interaction: APIUserApplicationCommandInteraction) => {\n %1 \n}",
+    args0: [
+      {
+        type: "field_multilinetext",
+        name: "CODE",
+        text: `const targetUser =
+  interaction.data.resolved.users[interaction.data.target_id];
+return {
+  type: InteractionResponseType.ChannelMessageWithSource,
+  data: {
+    content:
+      \`<@\${interaction.member?.user.id}> high-fived <@\${targetUser.id}>!\`,
+  },
+};`,
+        spellcheck: false,
+      },
+    ],
+    previousStatement: null,
+    nextStatement: null,
+  },
 ];
 
 enum Order {

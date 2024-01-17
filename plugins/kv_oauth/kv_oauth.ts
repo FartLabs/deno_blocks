@@ -1,6 +1,6 @@
-import { WEEK } from "$fresh/src/dev/deps.ts";
-import { createGitHubOAuthConfig, createHelpers } from "deno_kv_oauth/mod.ts";
 import type { Plugin } from "$fresh/server.ts";
+import { createGitHubOAuthConfig, createHelpers } from "deno_kv_oauth/mod.ts";
+import { WEEK } from "$fresh/src/dev/deps.ts";
 
 export const SESSION_DURATION_SECONDS = WEEK;
 export const SESSION_DURATION_MS = SESSION_DURATION_SECONDS * 1e3;
