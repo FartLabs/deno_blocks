@@ -18,6 +18,17 @@ export default function DenoBlocksIDEIsland() {
 
   const projects: SubhostingAPIProject[] = [];
 
+  function handleIconClick() {
+    const dialogElement = document.querySelector<HTMLDialogElement>(
+      "dialog.menu",
+    );
+    if (!dialogElement) {
+      throw new Error("dialog.menu not found");
+    }
+
+    dialogElement.showModal();
+  }
+
   useEffect(() => {
     if (!blocklyRef.current) {
       throw new Error("blocklyRef.current is null");
@@ -35,30 +46,77 @@ export default function DenoBlocksIDEIsland() {
       blocklyElement: blocklyRef.current,
       codeElement: codeRef.current,
     });
-  }, [blocklyRef, outputPanelRef, codeRef]);
+  }, [blocklyRef, codeRef]);
 
   return (
     <>
       <nav>
-        <div className="icon-container">
-          {
-            /* TODO: Project selector should be a modal dialog. Add a focus trap.
-        https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal#opening_a_modal_dialog */
-          }
+        <div
+          class="icon-container"
+          role="button"
+          tabIndex={0}
+          autoFocus={true}
+          onClick={handleIconClick}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              handleIconClick();
+            }
+          }}
+        >
           <DenoBlocksIcon />
         </div>
       </nav>
 
+      <dialog class="menu">
+        <form method="dialog">
+          <h2>Deno Blocks</h2>
+          <p>
+            <label for="menu-project-input">Project:</label>
+            <select name="menu-project-input">
+              <option></option>
+              {projects.map((project) => (
+                <option value={project.id}>{project.name}</option>
+              ))}
+              {/* Test Data: */}
+              <option>Brine shrimp</option>
+              <option>Red panda</option>
+              <option>Spider monkey</option>
+            </select>
+          </p>
+          <div>
+            {/* <button class="menu-create-button">Create new project</button> */}
+            <button
+              class="menu-close-button"
+              type="submit"
+            >
+              Close
+            </button>
+          </div>
+        </form>
+
+        {
+          /* TODO:
+        Sign in/out
+        Update dependencies
+        Deploy project
+        Select project
+        Delete project
+        Fork to edit/run
+        Import library
+        Share project */
+        }
+      </dialog>
+
       <main>
         {/* TODO: Define panels */}
-        <div className="panel-container">
-          <div className="blockly-panel">
-            <div className="blockly" ref={blocklyRef} />
+        <div class="panel-container">
+          <div class="blockly-panel">
+            <div class="blockly" ref={blocklyRef} />
           </div>
 
-          <div className="output-panel" ref={outputPanelRef}>
-            <pre className="generated-code"><code ref={codeRef}/></pre>
-            <div className="output" />
+          <div class="output-panel" ref={outputPanelRef}>
+            <pre class="generated-code"><code ref={codeRef}/></pre>
+            <output class="output" />
           </div>
         </div>
       </main>

@@ -66,6 +66,8 @@ html {
   margin: 10px;
   width: min-content;
   background-color: #666;
+  outline: #fff 1px solid;
+  border-radius: 4px;
   opacity: 0.5;
   transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
@@ -142,6 +144,32 @@ form {
 
 .generated-code {
   background-color: #00ff00;
+}
+
+dialog.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+dialog.menu {
+  padding: 1em 2em;
+  margin: auto;
+  border-radius: 1em;
+  z-index: 1000;
+}
+
+dialog.menu::backdrop {
+  background-image: linear-gradient(
+    45deg,
+    magenta,
+    rebeccapurple,
+    dodgerblue,
+    green
+  );
+  opacity: 0.5;
 }
 
 /* Less than 1000px */
