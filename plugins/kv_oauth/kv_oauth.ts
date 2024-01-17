@@ -20,7 +20,7 @@ export const {
   },
 );
 
-export const kvOAuthPlugin = (_kv: Deno.Kv): Plugin => ({
+export const kvOAuthPlugin = (): Plugin => ({
   name: "kv-oauth",
   routes: [
     {
