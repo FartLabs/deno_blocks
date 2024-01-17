@@ -40,27 +40,15 @@ export default function DenoBlocksIDEIsland() {
   return (
     <>
       <nav>
-        {
-          /* TODO: Project selector should be a modal dialog. Add a focus trap.
+        <div className="icon-container">
+          {
+            /* TODO: Project selector should be a modal dialog. Add a focus trap.
         https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal#opening_a_modal_dialog */
-        }
-        <DenoBlocksIcon />
-
-        <div id="project-selector">
-          {projects.length > 0
-            ? (
-              <select id="project-list">
-                {projects?.map((p) => <option value={p.id}>{p.name}</option>)}
-              </select>
-            )
-            : null}
-          <form action="/project" method="POST">
-            <button type="submit" id="new-project">
-              Generate New Project
-            </button>
-          </form>
+          }
+          <DenoBlocksIcon />
         </div>
       </nav>
+
       <main>
         {/* TODO: Define panels */}
         <div className="panel-container">

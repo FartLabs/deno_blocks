@@ -58,22 +58,26 @@ html {
   background-image: url("/deno-blocks-icon.gif");
 }
 
-nav {
+.icon-container {
+  z-index: 100;
   position: absolute;
-  height: var(--nav-height);
-  top: 0;
   left: 0;
-  right: 0;
-  border-bottom: 1px solid #555;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  overflow: hidden;
+  bottom: 0;
+  margin: 10px;
+  width: min-content;
+  background-color: #666;
+  opacity: 0.5;
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.icon-container:hover {
+  opacity: 1;
+  transform: scale(1.33);
 }
 
 main {
   position: absolute;
-  top: var(--nav-height);
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
@@ -121,62 +125,17 @@ form {
 
 .blockly-panel {
   box-sizing: border-box;
-  /* color: #fff;
-  min-width: 200px;
-  background-color: aquamarine;
-  box-sizing: border-box;
-  float: left;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100%; */
+  position: relative;
   height: 100%;
   width: 70%;
-  /* position: absolute; */
-  /* right: 0;
-  top: 0;
-  left: 0;
-  bottom: 0; */
 }
 
 .blockly {
   height: 100%;
   width: 100%;
-  /* position: absolute;
-  right: 0;
-  top: 0;
-  left: 0;
-  bottom: 0; */
 }
 
 .output-panel {
-  /* padding: 1em;
-  color: #fff;
-  min-width: 200px;
-  position: relative;
-  background-color: aqua;
-  box-sizing: border-box;
-  float: left;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100%; */
-
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 400px;
-  overflow: auto;
-  /* margin: 1rem; */
-  /* position: absolute; */
-  /* width: 30%;
-  height: 100%; */
-  /* right: 0; */
-  height: 100%;
-  width: 10%;
-  text-orientation: sideways;
-  overflow: auto;
-  border-left: 1px solid #555;
-}
-
-.output-panel[open] {
   width: 30%;
   height: 100%;
 }
@@ -184,16 +143,6 @@ form {
 .generated-code {
   background-color: #00ff00;
 }
-
-/*.output {
-  height: 50%;
-}
-
-.transition-colors {
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-} */
 
 /* Less than 1000px */
 @media screen and (max-width: 999px) {
@@ -210,6 +159,5 @@ form {
     width: 100%;
     height: 50%;
     border-left: none;
-    border-top: 1px solid #555;
   }
 }
