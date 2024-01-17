@@ -185,7 +185,7 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
     type: "on_cron_schedule_event",
     colour: CRON_COLOUR,
     helpUrl: "https://crontab.guru/",
-    message0: "on cron schedule %1\nname: %2\n %3",
+    message0: "on cron schedule %1\nwith name %2\n %3",
     args0: [
       {
         type: "field_input",
@@ -303,21 +303,21 @@ enum Order {
   ATOMIC,
 }
 
+const handlersIdentifier = "__HTTP_REQUEST_EVENT_HANDLERS";
+
 const GET_DENO_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
   // HTTP blocks.
   g.forBlock["on_http_request_event"] = (block, generator) => {
     const statementMembers = generator.statementToCode(block, "MEMBERS");
-    const code = `Deno.serve((request) => {\n${statementMembers}\n});`;
+    // TODO: Push handlers into an array in the generated code and use
+    // a prefix and suffix to set up the array and call each handler.
+    const code =
+      `${handlersIdentifier}.push(async (request) => {\n${statementMembers}\n});`;
     return code;
   };
 
-  g.forBlock["http_request_event_handler"] = (block, generator) => {
-    const code = generator.statementToCode(block, "CODE");
-
-    // TODO: Figure out how to get code from statement.
-    // https://blocklycodelabs.dev/codelabs/custom-generator/index.html?index=..%2F..index#6
-    console.log({ code });
-
+  g.forBlock["http_request_event_handler"] = (block) => {
+    const code = block.getFieldValue("CODE");
     return code;
   };
 
@@ -343,12 +343,12 @@ const GET_DENO_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
     const cronSchedule = block.getFieldValue("CRON_SCHEDULE");
     const statementCode = generator.statementToCode(block, "CODE");
     const code =
-      `Deno.cron("${name}", "${cronSchedule}", () => {\n${statementCode}\n});`;
+      `Deno.cron("${name}", "${cronSchedule}", async () => {\n${statementCode}\n});`;
     return code;
   };
 
-  g.forBlock["cron_schedule_event_handler"] = (block, generator) => {
-    const code = generator.statementToCode(block, "CODE");
+  g.forBlock["cron_schedule_event_handler"] = (block) => {
+    const code = block.getFieldValue("CODE");
     return code;
   };
 
@@ -383,78 +383,19 @@ const GET_DENO_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
     return code;
   };
 
-  // JSON blocks.
-  g.forBlock["logic_null"] = () => {
-    return ["null", Order.ATOMIC];
-  };
-
-  g.forBlock["text"] = (block) => {
-    const textValue = block.getFieldValue("TEXT");
-    const code = `"${textValue}"`;
-    return [code, Order.ATOMIC];
-  };
-
-  g.forBlock["math_number"] = (block) => {
-    const code = String(block.getFieldValue("NUM"));
-    return [code, Order.ATOMIC];
-  };
-
-  g.forBlock["logic_boolean"] = (block) => {
-    const code = (block.getFieldValue("BOOL") === "TRUE") ? "true" : "false";
-    return [code, Order.ATOMIC];
-  };
-
-  g.forBlock["member"] = (block, generator) => {
-    const name = block.getFieldValue("MEMBER_NAME");
-    const value = generator.valueToCode(
-      block,
-      "MEMBER_VALUE",
-      Order.ATOMIC,
-    );
-    const code = `"${name}": ${value}`;
-    return code;
-  };
-
-  g.forBlock["lists_create_with"] = (block, generator) => {
-    const values = [];
-    const itemCount = (block as unknown as { itemCount_: number }).itemCount_;
-    for (let i = 0; i < itemCount; i++) {
-      const valueCode = generator.valueToCode(block, "ADD" + i, Order.ATOMIC);
-      if (valueCode) {
-        values.push(valueCode);
-      }
+  g.finish = (code) => {
+    return `const ${handlersIdentifier} = [];
+${code}
+Deno.serve(async (request) => {
+  for (const handler of ${handlersIdentifier}}) {
+    const response = await handler(request);
+    if (response) {
+      return response;
     }
-
-    const valueString = values.join(",\n");
-    const indentedValueString = generator.prefixLines(
-      valueString,
-      generator.INDENT,
-    );
-    const codeString = "[\n" + indentedValueString + "\n]";
-    return [codeString, Order.ATOMIC];
+  }
+  return new Response("Not found", { status: 404 });
+});`;
   };
-
-  g.forBlock["object"] = (block, generator) => {
-    const statementMembers = generator.statementToCode(block, "MEMBERS");
-    const code = "{\n" + statementMembers + "\n}";
-    return [code, Order.ATOMIC];
-  };
-
-  // (g as (typeof g & {
-  //   scrub_: typeof g["scrub_"];
-  // })).scrub_ = (
-  //   block,
-  //   code,
-  //   thisOnly,
-  // ) => {
-  //   const nextBlock = block.nextConnection &&
-  //     block.nextConnection.targetBlock();
-  //   if (nextBlock && !thisOnly) {
-  //     return code + ",\n" + g.blockToCode(nextBlock);
-  //   }
-
-  //   return code;
-  // };
 };
 
 const GET_DENO_BLOCKLY_THEME = () => {

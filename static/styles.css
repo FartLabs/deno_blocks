@@ -140,7 +140,9 @@ form {
 .output-panel {
   width: 40%;
   height: 100%;
-  background-color: #00ff00;
+  color: #00cc00;
+  overflow-y: auto;
+  padding: -10px;
 }
 
 .generated-code {
@@ -194,6 +196,7 @@ dialog.menu::backdrop {
 
 pre {
   counter-reset: line var(--line-num, 0);
+  outline: 1px solid #000;
 }
 
 pre span {
