@@ -12,24 +12,45 @@ const GET_DENO_BLOCKLY_TOOLBOX =
   (): Blockly.utils.toolbox.ToolboxDefinition => ({
     // TODO: Add categories.
     // https://developers.google.com/blockly/guides/configure/web/toolbox#categories
-    "kind": "flyoutToolbox",
+    "kind": "categoryToolbox",
     "contents": [
       {
-        "kind": "block",
-        "type": "on_http_request_event",
+        "kind": "category",
+        "name": "HTTP",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "on_http_request_event",
+          },
+          {
+            "kind": "block",
+            "type": "routed_http_request_event_handler",
+          },
+          {
+            "kind": "block",
+            "type": "http_error_handler",
+          },
+          {
+            "kind": "block",
+            "type": "http_request_event_handler",
+          },
+        ],
       },
       {
-        "kind": "block",
-        "type": "routed_http_request_event_handler",
+        "kind": "category",
+        "name": "Cron",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "on_cron_schedule_event",
+          },
+          {
+            "kind": "block",
+            "type": "cron_schedule_event_handler",
+          },
+        ],
       },
-      {
-        "kind": "block",
-        "type": "http_request_event_handler",
-      },
-      {
-        "kind": "block",
-        "type": "on_cron_schedule_event",
-      },
+      //
       // {
       //   "kind": "block",
       //   "type": "on_kv_queue_message_event",
