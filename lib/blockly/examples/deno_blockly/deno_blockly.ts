@@ -218,85 +218,6 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
     previousStatement: null,
     nextStatement: null,
   },
-
-  // Discord blocks.
-  {
-    type: "on_discord_message_interaction_event",
-    colour: DISCORD_COLOUR,
-    message0: "on discord message interaction %1 %2",
-    args0: [
-      {
-        type: "input_dummy",
-      },
-      {
-        type: "input_statement",
-        name: "CODE",
-      },
-    ],
-  },
-  {
-    type: "discord_message_interaction_event_handler",
-    colour: DISCORD_COLOUR,
-    message0:
-      "(interaction: APIMessageApplicationCommandInteraction) => {\n %1 \n}",
-    args0: [
-      {
-        type: "field_multilinetext",
-        name: "CODE",
-        text: `const message =
-  interaction.data.resolved.messages[interaction.data.target_id];
-const messageURL =
-  \`https://discord.com/channels/\${interaction.guild_id}/\${message.channel_id}/\${message.id}\`;
-return {
-  type: InteractionResponseType.ChannelMessageWithSource,
-  data: {
-    content:
-      \`Bookmarked \${messageURL} for <@\${interaction.member?.user.id}>!\`,
-  },
-};`,
-      },
-    ],
-    previousStatement: null,
-    nextStatement: null,
-  },
-  {
-    type: "on_discord_user_interaction_event",
-    colour: DISCORD_COLOUR,
-    message0: "on discord user interaction %1 %2",
-    args0: [
-      {
-        type: "input_dummy",
-      },
-      {
-        type: "input_statement",
-        name: "CODE",
-      },
-    ],
-  },
-  {
-    type: "discord_user_interaction_event_handler",
-    colour: DISCORD_COLOUR,
-    message0:
-      "(interaction: APIUserApplicationCommandInteraction) => {\n %1 \n}",
-    args0: [
-      {
-        type: "field_multilinetext",
-        name: "CODE",
-        text: `const targetUser =
-  interaction.data.resolved.users[interaction.data.target_id];
-return {
-  type: InteractionResponseType.ChannelMessageWithSource,
-  data: {
-    content:
-      \`<@\${interaction.member?.user.id}> high-fived <@\${targetUser.id}>!\`,
-  },
-};`,
-        spellcheck: false,
-      },
-    ],
-    previousStatement: null,
-    nextStatement: null,
-  },
 ];
 
 enum Order {
@@ -352,39 +273,9 @@ const GET_DENO_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
     return code;
   };
 
-  // Discord blocks.
-  g.forBlock["on_discord_message_interaction_event"] = (block, generator) => {
-    const statementCode = generator.statementToCode(block, "CODE");
-    const code =
-      `Deno.discord.on("messageInteractionCreate", (interaction) => {\n${statementCode}\n});`;
-    return code;
-  };
-
-  g.forBlock["discord_message_interaction_event_handler"] = (
-    block,
-    generator,
-  ) => {
-    const code = generator.statementToCode(block, "CODE");
-    return code;
-  };
-
-  g.forBlock["on_discord_user_interaction_event"] = (block, generator) => {
-    const statementCode = generator.statementToCode(block, "CODE");
-    const code =
-      `Deno.discord.on("userInteractionCreate", (interaction) => {\n${statementCode}\n});`;
-    return code;
-  };
-
-  g.forBlock["discord_user_interaction_event_handler"] = (
-    block,
-    generator,
-  ) => {
-    const code = generator.statementToCode(block, "CODE");
-    return code;
-  };
-
   g.finish = (code) => {
-    return `const ${handlersIdentifier} = [];
+    return `if (import.meta.main) {
+const ${handlersIdentifier} = [];
 ${code}
 Deno.serve(async (request) => {
   for (const handler of ${handlersIdentifier}}) {
@@ -394,7 +285,8 @@ Deno.serve(async (request) => {
     }
   }
   return new Response("Not found", { status: 404 });
-});`;
+});
+}`;
   };
 };
 
