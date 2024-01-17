@@ -46,7 +46,7 @@ export function getWorkspace(
 export function blockly(options: BlocklyOptions) {
   // Reference: https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
   const blocks = Blockly.common.createBlockDefinitionsFromJsonArray(
-    options.getBlocks() ?? [],
+    options.getBlocks(),
   );
 
   // Register the blocks with Blockly.
@@ -72,7 +72,11 @@ export function blockly(options: BlocklyOptions) {
     }
 
     const code = generator.workspaceToCode(workspace);
-    options.codeElement.textContent = code;
+    const spannedCode = code
+      .split("\n")
+      .map((line) => `<span>${line}</span>`)
+      .join("\n");
+    options.codeElement.innerHTML = spannedCode;
   }
 
   if (options.getInitialWorkspace) {

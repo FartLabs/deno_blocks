@@ -86,40 +86,6 @@ const GET_DENO_BLOCKLY_TOOLBOX =
         // TODO: Add Kv queues category.
         // TODO: Add mapper block that is a function that maps one type to another.
         //
-
-        //
-        // {
-        //   "kind": "block",
-        //   "type": "on_kv_queue_message_event",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "on_kv_watch_event",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "import_all_as",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "import_as",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "http_request_handler",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "kv_definition",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "function_definition",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "function_call",
-        // },
       ],
     };
   };
@@ -169,7 +135,7 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
   {
     type: "http_request_event_method_handler",
     colour: HTTP_COLOUR,
-    message0: "if method is %1 %2 %3",
+    message0: "if method is %1\n %2",
     args0: [
       {
         type: "field_dropdown",
@@ -185,9 +151,6 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
         ],
       },
       {
-        type: "input_dummy",
-      },
-      {
         type: "input_statement",
         name: "MEMBERS",
       },
@@ -198,7 +161,7 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
   {
     type: "http_request_event_pathname_handler",
     colour: HTTP_COLOUR,
-    message0: "if pathname matches %1 %2 %3",
+    message0: "if pathname matches %1\n %2 %3",
     args0: [
       {
         type: "field_input",
@@ -206,11 +169,11 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
         text: "/",
       },
       {
-        type: "input_dummy",
-      },
-      {
         type: "input_statement",
         name: "MEMBERS",
+      },
+      {
+        type: "input_dummy",
       },
     ],
     previousStatement: null,
@@ -221,6 +184,7 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
   {
     type: "on_cron_schedule_event",
     colour: CRON_COLOUR,
+    helpUrl: "https://crontab.guru/",
     message0: "on cron schedule %1\nname: %2\n %3",
     args0: [
       {
@@ -340,6 +304,86 @@ enum Order {
 }
 
 const GET_DENO_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
+  // HTTP blocks.
+  g.forBlock["on_http_request_event"] = (block, generator) => {
+    const statementMembers = generator.statementToCode(block, "MEMBERS");
+    const code = `Deno.serve((request) => {\n${statementMembers}\n});`;
+    return code;
+  };
+
+  g.forBlock["http_request_event_handler"] = (block, generator) => {
+    const code = generator.statementToCode(block, "CODE");
+
+    // TODO: Figure out how to get code from statement.
+    // https://blocklycodelabs.dev/codelabs/custom-generator/index.html?index=..%2F..index#6
+    console.log({ code });
+
+    return code;
+  };
+
+  g.forBlock["http_request_event_method_handler"] = (block, generator) => {
+    const method = block.getFieldValue("METHOD");
+    const statementMembers = generator.statementToCode(block, "MEMBERS");
+    const code =
+      `if (request.method === "${method}") {\n${statementMembers}\n}`;
+    return code;
+  };
+
+  g.forBlock["http_request_event_pathname_handler"] = (block, generator) => {
+    const pathname = block.getFieldValue("PATH");
+    const statementMembers = generator.statementToCode(block, "MEMBERS");
+    const code =
+      `if (new URLPattern({ pathname: "${pathname}" }).test({ pathname: new URL(request.url).pathname })) {\n${statementMembers}\n}`;
+    return code;
+  };
+
+  // Cron blocks.
+  g.forBlock["on_cron_schedule_event"] = (block, generator) => {
+    const name = block.getFieldValue("NAME");
+    const cronSchedule = block.getFieldValue("CRON_SCHEDULE");
+    const statementCode = generator.statementToCode(block, "CODE");
+    const code =
+      `Deno.cron("${name}", "${cronSchedule}", () => {\n${statementCode}\n});`;
+    return code;
+  };
+
+  g.forBlock["cron_schedule_event_handler"] = (block, generator) => {
+    const code = generator.statementToCode(block, "CODE");
+    return code;
+  };
+
+  // Discord blocks.
+  g.forBlock["on_discord_message_interaction_event"] = (block, generator) => {
+    const statementCode = generator.statementToCode(block, "CODE");
+    const code =
+      `Deno.discord.on("messageInteractionCreate", (interaction) => {\n${statementCode}\n});`;
+    return code;
+  };
+
+  g.forBlock["discord_message_interaction_event_handler"] = (
+    block,
+    generator,
+  ) => {
+    const code = generator.statementToCode(block, "CODE");
+    return code;
+  };
+
+  g.forBlock["on_discord_user_interaction_event"] = (block, generator) => {
+    const statementCode = generator.statementToCode(block, "CODE");
+    const code =
+      `Deno.discord.on("userInteractionCreate", (interaction) => {\n${statementCode}\n});`;
+    return code;
+  };
+
+  g.forBlock["discord_user_interaction_event_handler"] = (
+    block,
+    generator,
+  ) => {
+    const code = generator.statementToCode(block, "CODE");
+    return code;
+  };
+
+  // JSON blocks.
   g.forBlock["logic_null"] = () => {
     return ["null", Order.ATOMIC];
   };
@@ -396,21 +440,21 @@ const GET_DENO_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
     return [code, Order.ATOMIC];
   };
 
-  (g as (typeof g & {
-    scrub_: typeof g["scrub_"];
-  })).scrub_ = (
-    block,
-    code,
-    thisOnly,
-  ) => {
-    const nextBlock = block.nextConnection &&
-      block.nextConnection.targetBlock();
-    if (nextBlock && !thisOnly) {
-      return code + ",\n" + g.blockToCode(nextBlock);
-    }
+  // (g as (typeof g & {
+  //   scrub_: typeof g["scrub_"];
+  // })).scrub_ = (
+  //   block,
+  //   code,
+  //   thisOnly,
+  // ) => {
+  //   const nextBlock = block.nextConnection &&
+  //     block.nextConnection.targetBlock();
+  //   if (nextBlock && !thisOnly) {
+  //     return code + ",\n" + g.blockToCode(nextBlock);
+  //   }
 
-    return code;
-  };
+  //   return code;
+  // };
 };
 
 const GET_DENO_BLOCKLY_THEME = () => {

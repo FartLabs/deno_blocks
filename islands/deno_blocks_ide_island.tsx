@@ -7,6 +7,7 @@ export default function DenoBlocksIDEIsland() {
   const blocklyRef = useRef<HTMLDivElement>(null);
   const outputPanelRef = useRef<HTMLDivElement>(null);
   const codeRef = useRef<HTMLElement>(null);
+  const denoBlocksCompilerOutputRef = useRef<HTMLElement>(null);
 
   // TODO: Load workspace from Deno KV by session ID. Listen for server-sent
   // events to update the workspace.
@@ -115,8 +116,17 @@ export default function DenoBlocksIDEIsland() {
           </div>
 
           <div class="output-panel" ref={outputPanelRef}>
-            <pre class="generated-code"><code ref={codeRef}/></pre>
-            <output class="output" />
+            <details open>
+              <summary>Generated code</summary>
+
+              <pre class="generated-code"><code ref={codeRef}/></pre>
+            </details>
+            <details open>
+              <summary>Deno Blocks compiler output</summary>
+
+              <pre class="deno-blocks-compiler-output"><code ref={denoBlocksCompilerOutputRef}/></pre>
+            </details>
+            {/* <output class="output" /> */}
           </div>
         </div>
       </main>

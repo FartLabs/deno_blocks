@@ -138,12 +138,14 @@ form {
 }
 
 .output-panel {
-  width: 30%;
+  width: 40%;
   height: 100%;
+  background-color: #00ff00;
 }
 
 .generated-code {
-  background-color: #00ff00;
+  padding: 1em;
+  text-wrap: balance;
 }
 
 dialog.menu {
@@ -188,4 +190,16 @@ dialog.menu::backdrop {
     height: 50%;
     border-left: none;
   }
+}
+
+pre {
+  counter-reset: line var(--line-num, 0);
+}
+
+pre span {
+  counter-increment: line;
+}
+
+pre span::before {
+  content: counter(line) "|";
 }
