@@ -4,10 +4,8 @@
 // same Deno Kv path.
 // https://github.com/denoland/deno_kv_oauth/blob/5c17b1868fb239e97b89e8400b1a97a66342ea61/lib/_kv.ts#L10
 //
-// Attention: This relies on MY_DENO_KV_PATH being the same as DENO_KV_PATH.
-//
 
-const DENO_KV_PATH_KEY = "MY_DENO_KV_PATH";
+const DENO_KV_PATH_KEY = "DENO_KV_PATH";
 let path: string | undefined = undefined;
 if (
   (await Deno.permissions.query({

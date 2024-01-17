@@ -1,6 +1,10 @@
 import { type PageProps } from "$fresh/server.ts";
 
-export default function App({ Component }: PageProps) {
+export default function App(props: PageProps) {
+  if (props.url.pathname.startsWith("/kv-insights/")) {
+    return <props.Component />;
+  }
+
   return (
     <html>
       <head>
@@ -12,7 +16,7 @@ export default function App({ Component }: PageProps) {
         <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
       </head>
       <body>
-        <Component />
+        <props.Component />
       </body>
     </html>
   );

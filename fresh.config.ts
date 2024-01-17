@@ -1,13 +1,29 @@
 import { defineConfig } from "$fresh/server.ts";
-import { kvInsightsPlugin } from "https://deno.land/x/deno_kv_insights@v0.8.0-beta/mod.ts";
+import { kvInsightsPlugin } from "deno_kv_insights/mod.ts";
+import { parse } from "boolean/mod.ts";
 import { kvOAuthPlugin } from "#/plugins/kv_oauth/mod.ts";
 import { denoBlocksAPIPlugin } from "#/plugins/deno_blocks_api/mod.ts";
 import { kv } from "#/lib/resources/kv.ts";
 
-export default defineConfig({
-  plugins: [
-    kvOAuthPlugin(),
-    denoBlocksAPIPlugin({ kv }),
-    kvInsightsPlugin({ kv }),
-  ],
-});
+const plugins = [
+  kvOAuthPlugin(),
+  denoBlocksAPIPlugin({ kv }),
+];
+
+const ENABLE_KV_INSIGHTS_KEY = "ENABLE_KV_INSIGHTS";
+let enableKvInsights = false;
+if (
+  (await Deno.permissions.query({
+    name: "env",
+    variable: ENABLE_KV_INSIGHTS_KEY,
+  }))
+    .state === "granted"
+) {
+  enableKvInsights = parse(Deno.env.get(ENABLE_KV_INSIGHTS_KEY));
+}
+
+if (enableKvInsights) {
+  plugins.push(kvInsightsPlugin({ kv }));
+}
+
+export default defineConfig({ plugins });
