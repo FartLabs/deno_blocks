@@ -80,6 +80,12 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
     denoBlockly({
       blocklyElement: blocklyRef.current,
       codeElement: codeRef.current,
+      // TODO: Load workspace from Deno Kv.
+      // getInitialWorkspace: () => props.initialWorkspace,
+      // onWorkspaceChange: (workspace) => {
+      //   // TODO: Save workspace to Deno Kv via API endpoint.
+      //   console.log(workspace);
+      // },
     });
   }, [denoBlockly, blocklyRef, codeRef]);
 
