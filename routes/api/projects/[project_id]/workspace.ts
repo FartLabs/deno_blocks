@@ -14,6 +14,16 @@ export const handler: Handlers = {
       return new Response("Unauthorized", { status: 401 });
     }
 
+    // Check if user owns project.
+    const user = await denoBlocksKv.getUserBySessionID({ sessionID });
+    if (!user) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+
+    if (!user.projects.find((p) => p.id === projectID)) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+
     // Get workspace from KV.
     const stringifiedWorkspace = await denoBlocksKv
       .getStringifiedWorkspaceByProjectID({ projectID });
@@ -32,6 +42,16 @@ export const handler: Handlers = {
 
     const sessionID = await getSessionId(request);
     if (!sessionID) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+
+    // Check if user owns project.
+    const user = await denoBlocksKv.getUserBySessionID({ sessionID });
+    if (!user) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+
+    if (!user.projects.find((p) => p.id === projectID)) {
       return new Response("Unauthorized", { status: 401 });
     }
 

@@ -269,7 +269,7 @@ export interface SubhostingAPICreateDeploymentOptions
   extends SubhostingAPIBaseOptions {
   projectId: string;
   entrypointUrl: string;
-  assets: object[];
+  assets: object;
   importMapUrl: string | null;
   lockFileUrl: string | null;
   compilerOptions: object | null;

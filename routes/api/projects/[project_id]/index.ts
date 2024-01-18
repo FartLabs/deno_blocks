@@ -38,7 +38,12 @@ export const handler: Handlers = {
       return new Response("Unauthorized", { status: 401 });
     }
 
-    return Response.json(project);
+    return new Response(
+      JSON.stringify(project),
+      {
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   },
   async DELETE(request: Request, context: FreshContext) {
     const projectID = context.params.project_id;
@@ -80,6 +85,6 @@ export const handler: Handlers = {
 
     // Delete the project from Kv.
     await denoBlocksKv.deleteProject({ userID, projectID });
-    return new Response("", { status: 200 });
+    return new Response("OK", { status: 200 });
   },
 };

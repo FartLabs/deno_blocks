@@ -3,11 +3,15 @@ import { default as Blockly } from "blockly";
 import { denoBlockly } from "#/lib/blockly/examples/deno_blockly/mod.ts";
 import DenoBlocksIcon from "#/components/deno_blocks_icon.tsx";
 import type { DenoBlocksUser } from "#/lib/deno_blocks_kv/mod.ts";
-import type { SubhostingAPIProject } from "#/lib/subhosting_api/mod.ts";
+import type {
+  SubhostingAPIDeployment,
+  SubhostingAPIProject,
+} from "#/lib/subhosting_api/mod.ts";
 
 export interface DenoBlocksIDEIslandProps {
   user: DenoBlocksUser;
   project: SubhostingAPIProject;
+  // deployments: SubhostingAPIDeployment[];
   stringifiedWorkspace: string | null;
 }
 
@@ -57,8 +61,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
       return;
     }
 
-    window.history.pushState({}, "", `/projects/${projectID}`);
-    window.location.reload();
+    window.location.href = `/projects/${projectID}`;
   }
 
   function handleRefreshIframeButtonClick() {
@@ -70,6 +73,36 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
     if (iframeElement && iframeElement.contentWindow) {
       iframeElement.contentWindow.location.href = iframeElement.src;
     }
+  }
+
+  function handleDeployButtonClick() {
+    fetch(`/api/projects/${props.project.id}/deploy`, { method: "POST" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Failed to deploy project: ${response.status} ${response.statusText}`,
+          );
+        }
+
+        // TODO: Update deployments list.
+      });
+  }
+
+  function handleDeleteProjectButtonClick() {
+    fetch(`/api/projects/${props.project.id}`, { method: "DELETE" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Failed to delete project: ${response.status} ${response.statusText}`,
+          );
+        }
+
+        window.location.href = "/recent";
+      });
+  }
+
+  function handleCreateProjectButtonClick() {
+    window.location.href = "/new";
   }
 
   useEffect(() => {
@@ -157,21 +190,38 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
               <li>
                 <a href="/github">GitHub repository</a>
               </li>
+              <li>
+                <a href="/signout">Sign out</a>
+              </li>
             </ul>
-            <hr />
-            <a href="/signout">Sign out</a>
             <hr />
             <button
               class="menu-create-button"
-              formAction="/api/projects"
-              formMethod="post"
-              type="submit"
-              role="button"
               aria-label="Create new project"
               title="Create new project"
+              onClick={handleCreateProjectButtonClick}
             >
               Create new project
             </button>
+            <hr />
+            <button
+              class="menu-deploy-button"
+              aria-label="Deploy project"
+              title="Deploy project"
+              onClick={handleDeployButtonClick}
+            >
+              Deploy
+            </button>
+            <hr />
+            <button
+              class="menu-delete-project-button"
+              aria-label="Delete project"
+              title="Delete project"
+              onClick={handleDeleteProjectButtonClick}
+            >
+              Delete project
+            </button>
+            <hr />
             <button
               class="menu-close-button"
               type="submit"
