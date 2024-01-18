@@ -1,6 +1,4 @@
-import DenoBlocksIcon from "#/components/deno_blocks_icon.tsx";
-
-export default function IndexPage() {
+export default async function IndexPage() {
   return (
     <section class="landing__page">
       <div class="landing__page__buttons">
@@ -22,14 +20,18 @@ export default function IndexPage() {
                   srcset="/deno-blocks-icon-frame-0.gif"
                   media="(prefers-reduced-motion: reduce)"
                 />
-                <img src="/deno-blocks-icon.gif" alt="Deno Blocks Icon"  style="image-rendering: pixelated;" />
+                <img
+                  src="/deno-blocks-icon.gif"
+                  alt="Deno Blocks Icon"
+                  style="image-rendering: pixelated;"
+                />
               </picture>
             </div>
           </div>
           <p class="landing__page__description">
             Play with Deno Blocks, an IDE built with{" "}
             <a href="https://github.com/denoland/fresh">Fresh</a> and{" "}
-            <a href="https://github.com/google/blockly"></a>Blockly for the{" "}
+            <a href="https://github.com/google/blockly">Blockly</a> for the{" "}
             <a href="https://deno.com/blog/subhosting-hackathon">
               Deno Subhosting Hackathon
             </a>{" "}
