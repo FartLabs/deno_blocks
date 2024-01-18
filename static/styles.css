@@ -187,7 +187,7 @@ dialog.menu hr {
 .landing__page {
   display: flex;
   flex-direction: column;
-  align-items: baseline;
+  align-items: end;
   justify-content: space-between;
   height: 100vh;
   margin: 0;
@@ -195,17 +195,30 @@ dialog.menu hr {
 
 .landing__page__buttons {
   display: flex;
-  background: black;
-  padding: 0.5em;
-  border-radius: 3em;
-  /* margin-left: auto;
-  margin-top: auto; */
+  gap: 1em;
 }
 
 .landing__page__sourcecode {
+  background: black;
+  padding: 0.5em;
+  border-radius: 3em;
+  margin-top: 1em;
+  margin-right: 1em;
+}
+
+.landing__page__documentation {
   display: flex;
-  align-items: end;
-  justify-content: end;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border-radius: 2em;
+  background: black;
+  padding: 0.5em 1em;
+  margin-top: 1em;
+  text-decoration: none;
+  color: white;
+  font-size: 15px;
 }
 
 .landing__page__section {
@@ -213,7 +226,6 @@ dialog.menu hr {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 1em;
 }
 
 .landing__page__content {
@@ -221,8 +233,6 @@ dialog.menu hr {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 1024px;
-  width: 100%;
 }
 
 .landing__page__header {
@@ -266,14 +276,26 @@ dialog.menu hr {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 1em;
+  gap: 0.5em;
   background: black;
   padding: 0.5em 1.5em;
   border-radius: 2em;
   margin-top: 2em;
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
 }
 
-.landing__page__signin__text {
+.landing__page__openide {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  background: black;
+  padding: 0.5em 1.5em;
+  border-radius: 2em;
+  margin-top: 1em;
   text-decoration: none;
   color: white;
   font-size: 20px;
@@ -289,9 +311,8 @@ dialog.menu hr {
   justify-content: center;
   align-items: center;
   text-align: center;
-  /* margin-bottom: auto; */
   width: 100%;
-  background-color: gray;
+  background-color: #c2c2c2;
   padding: 1em 0;
 }
 

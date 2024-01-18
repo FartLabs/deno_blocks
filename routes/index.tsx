@@ -5,6 +5,10 @@ export default async function IndexPage(request: Request) {
   return (
     <section class="landing__page">
       <div class="landing__page__buttons">
+        <a class="landing__page__documentation" href="/github">
+          <img src="/documentation-logo.svg" alt="Documentation Logo" />
+          Docs
+        </a>
         <a class="landing__page__sourcecode" href="/github">
           <img src="/github_logo.svg" alt="Github Logo" />
         </a>
@@ -54,10 +58,14 @@ export default async function IndexPage(request: Request) {
               </>
             )
             : (
-              <div class="landing__page__signin">
-                <img src="/github_logo.svg" alt="Github Logo" />
-                <a class="landing__page__signin__text" href="/signin">
+              <div class="landing__page__start">
+                <a class="landing__page__signin" href="/signin">
+                  <img src="/github_logo.svg" alt="Github Logo" />
                   Sign In
+                </a>
+                <a class="landing__page__openide" href="/idk">
+                  <img src="/open-logo.svg" alt="Open Logo" />
+                  Open IDE
                 </a>
               </div>
             )}
