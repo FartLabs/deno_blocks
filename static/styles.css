@@ -138,12 +138,15 @@ form {
 }
 
 .output-panel {
-  width: 30%;
+  width: 40%;
   height: 100%;
+  color: #00cc00;
+  overflow-y: auto;
 }
 
 .generated-code {
-  background-color: #00ff00;
+  padding: 1em;
+  text-wrap: balance;
 }
 
 dialog.menu {
@@ -170,6 +173,14 @@ dialog.menu::backdrop {
     green
   );
   opacity: 0.5;
+}
+
+dialog.menu h2 {
+  padding: 1em 0;
+}
+
+dialog.menu hr {
+  margin: 1em 0;
 }
 
 /* Landing Page CSS */
@@ -299,7 +310,6 @@ dialog.menu::backdrop {
 
   .output-panel {
     width: 100%;
-    height: 50%;
     border-left: none;
   }
 
@@ -308,4 +318,17 @@ dialog.menu::backdrop {
     flex-direction: row;
     overflow-x: scroll;
   }
+}
+
+pre {
+  counter-reset: line var(--line-num, 0);
+  outline: 1px solid #000;
+}
+
+pre span {
+  counter-increment: line;
+}
+
+pre span::before {
+  content: counter(line) " ";
 }

@@ -14,7 +14,7 @@ import { storageKey } from "./storage_key.ts";
 // https://developers.google.com/blockly/guides/create-custom-blocks/block-colour
 const HTTP_COLOUR = "0";
 const CRON_COLOUR = "270";
-const DISCORD_COLOUR = "#5865F2"; // Blurple.
+// const DISCORD_COLOUR = "#5865F2"; // Blurple.
 
 const GET_DENO_BLOCKLY_TOOLBOX =
   (): Blockly.utils.toolbox.ToolboxDefinition => {
@@ -59,82 +59,24 @@ const GET_DENO_BLOCKLY_TOOLBOX =
             },
           ],
         },
-        {
-          "kind": "category",
-          "name": "Discord",
-          "colour": DISCORD_COLOUR,
-          "contents": [
-            {
-              "kind": "block",
-              "type": "on_discord_message_interaction_event",
-            },
-            {
-              "kind": "block",
-              "type": "discord_message_interaction_event_handler",
-            },
-            {
-              "kind": "block",
-              "type": "on_discord_user_interaction_event",
-            },
-            {
-              "kind": "block",
-              "type": "discord_user_interaction_event_handler",
-            },
-          ],
-        },
+        // Category ideas:
         // TODO: Add Kv watch category.
         // TODO: Add Kv queues category.
-        // TODO: Add mapper block that is a function that maps one type to another.
+        // TODO: Add Discord category.
         //
-
-        //
-        // {
-        //   "kind": "block",
-        //   "type": "on_kv_queue_message_event",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "on_kv_watch_event",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "import_all_as",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "import_as",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "http_request_handler",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "kv_definition",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "function_definition",
-        // },
-        // {
-        //   "kind": "block",
-        //   "type": "function_call",
-        // },
       ],
     };
   };
 
 const GET_DENO_BLOCKLY_BLOCKS = () => [
+  // Block ideas:
   // TODO: Create kv watch event block.
   // TODO: Create kv queue message event block.
-  // TODO: Create cron schedule event block.
   // TODO: Create function definition block.
   // TODO: Create call function block with drop down containing function names.
   // TODO: Create import block.
   // TODO: Create global variable assignment block.
   // TODO: Create kv definition block.
-  // TODO: Create HTTP request handler block.
-  // TODO: Deploy button.
 
   // HTTP blocks.
   {
@@ -169,7 +111,7 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
   {
     type: "http_request_event_method_handler",
     colour: HTTP_COLOUR,
-    message0: "if method is %1 %2 %3",
+    message0: "if method is %1\n %2",
     args0: [
       {
         type: "field_dropdown",
@@ -185,9 +127,6 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
         ],
       },
       {
-        type: "input_dummy",
-      },
-      {
         type: "input_statement",
         name: "MEMBERS",
       },
@@ -198,7 +137,7 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
   {
     type: "http_request_event_pathname_handler",
     colour: HTTP_COLOUR,
-    message0: "if pathname matches %1 %2 %3",
+    message0: "if pathname matches %1\n %2 %3",
     args0: [
       {
         type: "field_input",
@@ -206,11 +145,11 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
         text: "/",
       },
       {
-        type: "input_dummy",
-      },
-      {
         type: "input_statement",
         name: "MEMBERS",
+      },
+      {
+        type: "input_dummy",
       },
     ],
     previousStatement: null,
@@ -221,7 +160,8 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
   {
     type: "on_cron_schedule_event",
     colour: CRON_COLOUR,
-    message0: "on cron schedule %1\nname: %2\n %3",
+    helpUrl: "https://crontab.guru/",
+    message0: "on cron schedule %1\nwith name %2\n %3",
     args0: [
       {
         type: "field_input",
@@ -254,162 +194,71 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
     previousStatement: null,
     nextStatement: null,
   },
-
-  // Discord blocks.
-  {
-    type: "on_discord_message_interaction_event",
-    colour: DISCORD_COLOUR,
-    message0: "on discord message interaction %1 %2",
-    args0: [
-      {
-        type: "input_dummy",
-      },
-      {
-        type: "input_statement",
-        name: "CODE",
-      },
-    ],
-  },
-  {
-    type: "discord_message_interaction_event_handler",
-    colour: DISCORD_COLOUR,
-    message0:
-      "(interaction: APIMessageApplicationCommandInteraction) => {\n %1 \n}",
-    args0: [
-      {
-        type: "field_multilinetext",
-        name: "CODE",
-        text: `const message =
-  interaction.data.resolved.messages[interaction.data.target_id];
-const messageURL =
-  \`https://discord.com/channels/\${interaction.guild_id}/\${message.channel_id}/\${message.id}\`;
-return {
-  type: InteractionResponseType.ChannelMessageWithSource,
-  data: {
-    content:
-      \`Bookmarked \${messageURL} for <@\${interaction.member?.user.id}>!\`,
-  },
-};`,
-      },
-    ],
-    previousStatement: null,
-    nextStatement: null,
-  },
-  {
-    type: "on_discord_user_interaction_event",
-    colour: DISCORD_COLOUR,
-    message0: "on discord user interaction %1 %2",
-    args0: [
-      {
-        type: "input_dummy",
-      },
-      {
-        type: "input_statement",
-        name: "CODE",
-      },
-    ],
-  },
-  {
-    type: "discord_user_interaction_event_handler",
-    colour: DISCORD_COLOUR,
-    message0:
-      "(interaction: APIUserApplicationCommandInteraction) => {\n %1 \n}",
-    args0: [
-      {
-        type: "field_multilinetext",
-        name: "CODE",
-        text: `const targetUser =
-  interaction.data.resolved.users[interaction.data.target_id];
-return {
-  type: InteractionResponseType.ChannelMessageWithSource,
-  data: {
-    content:
-      \`<@\${interaction.member?.user.id}> high-fived <@\${targetUser.id}>!\`,
-  },
-};`,
-        spellcheck: false,
-      },
-    ],
-    previousStatement: null,
-    nextStatement: null,
-  },
 ];
 
-enum Order {
-  ATOMIC,
-}
+const handlersIdentifier = "__HTTP_REQUEST_EVENT_HANDLERS";
 
 const GET_DENO_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
-  g.forBlock["logic_null"] = () => {
-    return ["null", Order.ATOMIC];
-  };
-
-  g.forBlock["text"] = (block) => {
-    const textValue = block.getFieldValue("TEXT");
-    const code = `"${textValue}"`;
-    return [code, Order.ATOMIC];
-  };
-
-  g.forBlock["math_number"] = (block) => {
-    const code = String(block.getFieldValue("NUM"));
-    return [code, Order.ATOMIC];
-  };
-
-  g.forBlock["logic_boolean"] = (block) => {
-    const code = (block.getFieldValue("BOOL") === "TRUE") ? "true" : "false";
-    return [code, Order.ATOMIC];
-  };
-
-  g.forBlock["member"] = (block, generator) => {
-    const name = block.getFieldValue("MEMBER_NAME");
-    const value = generator.valueToCode(
-      block,
-      "MEMBER_VALUE",
-      Order.ATOMIC,
-    );
-    const code = `"${name}": ${value}`;
-    return code;
-  };
-
-  g.forBlock["lists_create_with"] = (block, generator) => {
-    const values = [];
-    const itemCount = (block as unknown as { itemCount_: number }).itemCount_;
-    for (let i = 0; i < itemCount; i++) {
-      const valueCode = generator.valueToCode(block, "ADD" + i, Order.ATOMIC);
-      if (valueCode) {
-        values.push(valueCode);
-      }
-    }
-
-    const valueString = values.join(",\n");
-    const indentedValueString = generator.prefixLines(
-      valueString,
-      generator.INDENT,
-    );
-    const codeString = "[\n" + indentedValueString + "\n]";
-    return [codeString, Order.ATOMIC];
-  };
-
-  g.forBlock["object"] = (block, generator) => {
+  // HTTP blocks.
+  g.forBlock["on_http_request_event"] = (block, generator) => {
     const statementMembers = generator.statementToCode(block, "MEMBERS");
-    const code = "{\n" + statementMembers + "\n}";
-    return [code, Order.ATOMIC];
+    // TODO: Push handlers into an array in the generated code and use
+    // a prefix and suffix to set up the array and call each handler.
+    const code =
+      `${handlersIdentifier}.push(async (request) => {\n${statementMembers}\n});`;
+    return code;
   };
 
-  (g as (typeof g & {
-    scrub_: typeof g["scrub_"];
-  })).scrub_ = (
-    block,
-    code,
-    thisOnly,
-  ) => {
-    const nextBlock = block.nextConnection &&
-      block.nextConnection.targetBlock();
-    if (nextBlock && !thisOnly) {
-      return code + ",\n" + g.blockToCode(nextBlock);
-    }
-
+  g.forBlock["http_request_event_handler"] = (block) => {
+    const code = block.getFieldValue("CODE");
     return code;
+  };
+
+  g.forBlock["http_request_event_method_handler"] = (block, generator) => {
+    const method = block.getFieldValue("METHOD");
+    const statementMembers = generator.statementToCode(block, "MEMBERS");
+    const code =
+      `if (request.method === "${method}") {\n${statementMembers}\n}`;
+    return code;
+  };
+
+  g.forBlock["http_request_event_pathname_handler"] = (block, generator) => {
+    const pathname = block.getFieldValue("PATH");
+    const statementMembers = generator.statementToCode(block, "MEMBERS");
+    const code =
+      `if (new URLPattern({ pathname: "${pathname}" }).test({ pathname: new URL(request.url).pathname })) {\n${statementMembers}\n}`;
+    return code;
+  };
+
+  // Cron blocks.
+  g.forBlock["on_cron_schedule_event"] = (block, generator) => {
+    const name = block.getFieldValue("NAME");
+    const cronSchedule = block.getFieldValue("CRON_SCHEDULE");
+    const statementCode = generator.statementToCode(block, "CODE");
+    const code =
+      `Deno.cron("${name}", "${cronSchedule}", async () => {\n${statementCode}\n});`;
+    return code;
+  };
+
+  g.forBlock["cron_schedule_event_handler"] = (block) => {
+    const code = block.getFieldValue("CODE");
+    return code;
+  };
+
+  g.finish = (code) => {
+    return `if (import.meta.main) {
+const ${handlersIdentifier} = [];
+${code}
+Deno.serve(async (request) => {
+  for (const handler of ${handlersIdentifier}}) {
+    const response = await handler(request);
+    if (response) {
+      return response;
+    }
+  }
+  return new Response("Not found", { status: 404 });
+});
+}`;
   };
 };
 

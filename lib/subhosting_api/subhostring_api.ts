@@ -162,6 +162,34 @@ export async function createProject(
   return await response.json();
 }
 
+export interface SubhostingAPIDeleteProjectOptions
+  extends SubhostingAPIBaseOptions {
+  projectId: string;
+}
+
+export type SubhostingAPIDeleteProjectResult = void;
+
+/**
+ * Delete a project by ID.
+ * https://docs.deno.com/deploy/api/rest/projects#delete-a-project
+ */
+export async function deleteProject(
+  options: SubhostingAPIDeleteProjectOptions,
+): Promise<SubhostingAPIDeleteProjectResult> {
+  const baseOptions = getSubhostingAPIBaseOptions(options);
+  const url = new URL(
+    `${baseOptions.endpoint}/projects/${options.projectId}`,
+  );
+  const response = await baseOptions.fetch(url, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${baseOptions.accessToken}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return await response.json();
+}
+
 export interface SubhostingAPIGetDeploymentsOptions
   extends SubhostingAPIBaseOptions {
   /**
@@ -283,7 +311,169 @@ export async function createDeployment(
   return await response.json();
 }
 
-// TODO: Add more API methods e.g. delete deployment, etc.
+export interface SubhostingAPIDeleteDeploymentOptions
+  extends SubhostingAPIBaseOptions {
+  deploymentId: string;
+}
+
+export type SubhostingAPIDeleteDeploymentResult = void;
+
+/**
+ * Delete a deployment by ID.
+ */
+export async function deleteDeployment(
+  options: SubhostingAPIDeleteDeploymentOptions,
+): Promise<SubhostingAPIDeleteDeploymentResult> {
+  const baseOptions = getSubhostingAPIBaseOptions(options);
+  const url = new URL(
+    `${baseOptions.endpoint}/deployments/${options.deploymentId}`,
+  );
+  const response = await baseOptions.fetch(url, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${baseOptions.accessToken}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return await response.json();
+}
+
+export interface SubhostingAPIGetDeploymentAppLogsOptions
+  extends SubhostingAPIBaseOptions {
+  /**
+   * Text to search for in log message.
+   */
+  q: string;
+
+  /**
+   * Log level(s) to filter logs by.
+   *
+   * Defaults to all levels (i.e. no filter applied).
+   *
+   * Multiple levels can be specified using comma-separated format.
+   */
+  level?: string;
+
+  /**
+   * Region(s) to filter logs by.
+   *
+   * Defaults to all regions (i.e. no filter applied).
+   *
+   * Multiple regions can be specified using comma-separated format.
+   */
+  region?: string;
+
+  /**
+   * Start time of the time range to filter logs by.
+   *
+   * Defaults to the Unix Epoch (though the log retention period is 2 weeks as of now).
+   *
+   * If neither since nor until is specified, real-time logs are returned.
+   */
+  since?: string;
+
+  /**
+   * End time of the time range to filter logs by.
+   *
+   * Defaults to the current time.
+   *
+   * If neither since nor until is specified, real-time logs are returned.
+   */
+  until?: string;
+
+  /**
+   * Maximum number of logs to return in one request.
+   *
+   * This is only effective for the past log mode.
+   */
+  limit?: number;
+
+  /**
+   * The field to sort by. Currently only time is supported.
+   *
+   * This is only effective for the past log mode.
+   */
+  sort?: string;
+
+  /**
+   * Sort order, either asc or desc. Defaults to desc.
+   *
+   * For backward compatibility, timeAsc and timeDesc are also supported, but deprecated.
+   *
+   * This is only effective for the past log mode.
+   */
+  order?: string;
+
+  /**
+   * Opaque value that represents the cursor of the last log returned in the previous request.
+   *
+   * This is only effective for the past log mode.
+   */
+  cursor?: string;
+
+  /**
+   * Deployment ID.
+   */
+  deploymentId: string;
+}
+
+export interface SubhostingAPIGetDeploymentAppLogsResult {
+  time: string;
+  level: string;
+  message: string;
+  region: string;
+}
+
+export async function getDeploymentAppLogs(
+  options: SubhostingAPIGetDeploymentAppLogsOptions,
+): Promise<SubhostingAPIGetDeploymentAppLogsResult[]> {
+  const baseOptions = getSubhostingAPIBaseOptions(options);
+  const url = new URL(
+    `${baseOptions.endpoint}/deployments/${options.deploymentId}/app_logs`,
+  );
+  url.searchParams.set("q", options.q);
+  if (options.level) {
+    url.searchParams.set("level", options.level);
+  }
+
+  if (options.region) {
+    url.searchParams.set("region", options.region);
+  }
+
+  if (options.since) {
+    url.searchParams.set("since", options.since);
+  }
+
+  if (options.until) {
+    url.searchParams.set("until", options.until);
+  }
+
+  if (options.limit) {
+    url.searchParams.set("limit", options.limit.toString());
+  }
+
+  if (options.sort) {
+    url.searchParams.set("sort", options.sort);
+  }
+
+  if (options.order) {
+    url.searchParams.set("order", options.order);
+  }
+
+  if (options.cursor) {
+    url.searchParams.set("cursor", options.cursor);
+  }
+
+  const response = await baseOptions.fetch(url, {
+    headers: {
+      Authorization: `Bearer ${baseOptions.accessToken}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return await response.json();
+}
+
+// TODO: Add more API methods e.g. create kv database, delete kv database, etc.
 // https://docs.deno.com/deploy/api/rest
-// https://github.com/denoland/subhosting_ide_starter/blob/main/subhosting.ts
+// https://docs.deno.com/deploy/api/rest/databases#list-an-organizations-kv-databases
 //

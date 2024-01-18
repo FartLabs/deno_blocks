@@ -5,6 +5,7 @@ export function makeGitHubAPIURL(path: string): string {
 }
 
 export interface GitHubAPIUser {
+  id: number;
   login: string;
   avatar_url: string;
   html_url: string;
