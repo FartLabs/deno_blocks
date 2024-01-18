@@ -55,7 +55,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
       return;
     }
 
-    window.location.href = `/projects/${projectID}`;
+    window.history.pushState({}, "", `/projects/${projectID}`);
   }
 
   function handleRefreshIframeButtonClick() {
@@ -80,6 +80,12 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
     denoBlockly({
       blocklyElement: blocklyRef.current,
       codeElement: codeRef.current,
+      // TODO: Load workspace from Deno Kv.
+      // getInitialWorkspace: () => props.initialWorkspace,
+      // onWorkspaceChange: (workspace) => {
+      //   // TODO: Save workspace to Deno Kv via API endpoint.
+      //   console.log(workspace);
+      // },
     });
   }, [denoBlockly, blocklyRef, codeRef]);
 
@@ -108,7 +114,11 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
           <p>
             <label for="menu-project-input">Select project:</label>
             <br />
-            <select name="menu-project-input" onChange={handleProjectChange}>
+            <select
+              name="menu-project-input"
+              onChange={handleProjectChange}
+              value={props.project.id}
+            >
               {props.user.projects.length === 0
                 ? <option value="">No projects</option>
                 : props.user.projects.map((project) => (

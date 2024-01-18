@@ -6,6 +6,7 @@ export enum DenoBlocksKvKeyPrefix {
   USERS_BY_ID = "users_by_id",
   USERS_BY_GITHUB_USER_ID = "users_by_github_user_id",
   USER_IDS_BY_SESSION_ID = "user_ids_by_session_id",
+  WORKSPACES_BY_PROJECT_ID = "workspaces_by_project_id",
 }
 
 export interface DenoBlocksUser {

@@ -1,4 +1,7 @@
-export default function IndexPage() {
+import { getSessionId } from "deno_kv_oauth/mod.ts";
+
+export default async function IndexPage(request: Request) {
+  const sessionID = await getSessionId(request);
   return (
     <section class="landing__page">
       <div class="landing__page__buttons">
@@ -29,19 +32,35 @@ export default function IndexPage() {
             </div>
           </div>
           <p class="landing__page__description">
-            Play with <strong>Deno Blocks</strong>, an <i>IDE</i> built with{" "}
+            Play with <strong>Deno Blocks</strong>, an <i>IDE</i> built with
+            {" "}
             <a href="https://github.com/denoland/fresh">Fresh</a> and{" "}
             <a href="https://github.com/google/blockly">Blockly</a> for the{" "}
             <a href="https://deno.com/blog/subhosting-hackathon">
               Deno Subhosting Hackathon
             </a>{" "}
-            that allows developers to drag-and-drop Deno's automatic instrumentation.
+            that allows developers to drag-and-drop Deno's automatic
+            instrumentation.
           </p>
-          <div class="landing__page__signin">
-            <img src="/github_logo.svg" alt="Github Logo" />
-            <a class="landing__page__signin__text" href="/signin">Sign In</a>
-          </div>
-          <a class="landing__page__openide__text" href="/">Open IDE</a>
+          {sessionID
+            ? (
+              <>
+                <a class="landing__page__openide__text" href="/recent">
+                  Open IDE
+                </a>
+                <a class="landing__page__openide__text" href="/signout">
+                  Sign out
+                </a>
+              </>
+            )
+            : (
+              <div class="landing__page__signin">
+                <img src="/github_logo.svg" alt="Github Logo" />
+                <a class="landing__page__signin__text" href="/signin">
+                  Sign In
+                </a>
+              </div>
+            )}
         </div>
         <div class="landing__page__image">
           <picture>

@@ -9,7 +9,9 @@ import * as $api_projects_index from "./routes/api/projects/index.ts";
 import * as $github from "./routes/github.ts";
 import * as $icon from "./routes/icon.tsx";
 import * as $index from "./routes/index.tsx";
+import * as $new from "./routes/new.ts";
 import * as $projects_project_id_ from "./routes/projects/[project_id].tsx";
+import * as $recent from "./routes/recent.ts";
 import * as $deno_blocks_ide_island from "./islands/deno_blocks_ide_island.tsx";
 import { type Manifest } from "$fresh/server.ts";
 
@@ -22,7 +24,9 @@ const manifest = {
     "./routes/github.ts": $github,
     "./routes/icon.tsx": $icon,
     "./routes/index.tsx": $index,
+    "./routes/new.ts": $new,
     "./routes/projects/[project_id].tsx": $projects_project_id_,
+    "./routes/recent.ts": $recent,
   },
   islands: {
     "./islands/deno_blocks_ide_island.tsx": $deno_blocks_ide_island,
