@@ -7,7 +7,7 @@ import { kv } from "#/lib/resources/kv.ts";
 
 const plugins = [
   kvOAuthPlugin(),
-  denoBlocksAPIPlugin({ kv }),
+  denoBlocksAPIPlugin(),
 ];
 
 const ENABLE_KV_INSIGHTS_KEY = "ENABLE_KV_INSIGHTS";
