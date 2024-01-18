@@ -1,7 +1,11 @@
 import type { FreshContext } from "$fresh/src/server/mod.ts";
 import { getSessionId } from "deno_kv_oauth/mod.ts";
-import { denoBlocksKv } from "#/lib/resources/deno_blocks_kv.ts";
 import DenoBlocksIDEIsland from "#/islands/deno_blocks_ide_island.tsx";
+import { getDeployments } from "#/lib/subhosting_api/mod.ts";
+import { denoBlocksKv } from "#/lib/resources/deno_blocks_kv.ts";
+
+const DEPLOY_ORG_ID = Deno.env.get("DEPLOY_ORG_ID")!;
+const DEPLOY_ACCESS_TOKEN = Deno.env.get("DEPLOY_ACCESS_TOKEN")!;
 
 export default async function ProjectPage(
   request: Request,
@@ -40,10 +44,19 @@ export default async function ProjectPage(
   const stringifiedWorkspace = await denoBlocksKv
     .getStringifiedWorkspaceByProjectID({ projectID });
 
+  // Get the deployments from the project.
+  const deployments = await getDeployments({
+    projectId: projectID,
+    organizationID: DEPLOY_ORG_ID,
+    accessToken: DEPLOY_ACCESS_TOKEN,
+  });
+  console.log({ deployments });
+
   return (
     <DenoBlocksIDEIsland
       user={user}
       project={project}
+      deployments={deployments}
       stringifiedWorkspace={stringifiedWorkspace}
     />
   );

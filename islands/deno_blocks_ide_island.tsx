@@ -11,7 +11,7 @@ import type {
 export interface DenoBlocksIDEIslandProps {
   user: DenoBlocksUser;
   project: SubhostingAPIProject;
-  // deployments: SubhostingAPIDeployment[];
+  deployments: SubhostingAPIDeployment[];
   stringifiedWorkspace: string | null;
 }
 
@@ -76,7 +76,15 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
   }
 
   function handleDeployButtonClick() {
-    fetch(`/api/projects/${props.project.id}/deploy`, { method: "POST" })
+    const code = codeRef.current?.innerText;
+    console.log("Deploying project...", { code });
+    fetch(
+      `/api/projects/${props.project.id}/deployments`,
+      {
+        method: "POST",
+        body: code,
+      },
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error(
@@ -84,11 +92,21 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
           );
         }
 
-        // TODO: Update deployments list.
+        // TODO: Set timeout to update deployments list.
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }
 
   function handleDeleteProjectButtonClick() {
+    const confirmed = confirm(
+      `Are you sure you want to delete project "${props.project.name}"?`,
+    );
+    if (!confirmed) {
+      return;
+    }
+
     fetch(`/api/projects/${props.project.id}`, { method: "DELETE" })
       .then((response) => {
         if (!response.ok) {
@@ -266,7 +284,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
 
               <pre class="generated-code"><code ref={codeRef}/></pre>
             </details>
-            <details>
+            <details open>
               <summary>Deployments</summary>
               <select onChange={handleDeploymentChange}>
                 <option />

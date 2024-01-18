@@ -268,12 +268,12 @@ export async function getDeployments(
 export interface SubhostingAPICreateDeploymentOptions
   extends SubhostingAPIBaseOptions {
   projectId: string;
-  entrypointUrl: string;
+  entryPointUrl: string;
   assets: object;
   importMapUrl: string | null;
   lockFileUrl: string | null;
   compilerOptions: object | null;
-  envVars?: Record<string, string>;
+  envVars: Record<string, string>;
   databases?: Record<string, string>;
   description?: string;
 }
@@ -298,7 +298,7 @@ export async function createDeployment(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      entrypointUrl: options.entrypointUrl,
+      entryPointUrl: options.entryPointUrl,
       assets: options.assets,
       importMapUrl: options.importMapUrl,
       lockFileUrl: options.lockFileUrl,

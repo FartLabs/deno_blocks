@@ -4,7 +4,8 @@
 
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
-import * as $api_projects_project_id_deploy from "./routes/api/projects/[project_id]/deploy.ts";
+import * as $api_projects_project_id_deployments_deployment_id_index from "./routes/api/projects/[project_id]/deployments/[deployment_id]/index.ts";
+import * as $api_projects_project_id_deployments_index from "./routes/api/projects/[project_id]/deployments/index.ts";
 import * as $api_projects_project_id_index from "./routes/api/projects/[project_id]/index.ts";
 import * as $api_projects_project_id_workspace from "./routes/api/projects/[project_id]/workspace.ts";
 import * as $api_projects_index from "./routes/api/projects/index.ts";
@@ -21,8 +22,10 @@ const manifest = {
   routes: {
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
-    "./routes/api/projects/[project_id]/deploy.ts":
-      $api_projects_project_id_deploy,
+    "./routes/api/projects/[project_id]/deployments/[deployment_id]/index.ts":
+      $api_projects_project_id_deployments_deployment_id_index,
+    "./routes/api/projects/[project_id]/deployments/index.ts":
+      $api_projects_project_id_deployments_index,
     "./routes/api/projects/[project_id]/index.ts":
       $api_projects_project_id_index,
     "./routes/api/projects/[project_id]/workspace.ts":
