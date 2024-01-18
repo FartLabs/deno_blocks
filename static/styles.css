@@ -279,6 +279,7 @@ dialog.menu hr {
   align-items: center;
   width: 100%;
   padding: 0 2em;
+  margin-bottom: 2em;
 }
 
 .landing__page__signin {
@@ -304,7 +305,7 @@ dialog.menu hr {
   background: black;
   padding: 0.5em 1.5em;
   border-radius: 2em;
-  margin-top: 1em;
+  margin: 1em 0;
   text-decoration: none;
   color: white;
   font-size: 20px;
@@ -342,9 +343,25 @@ dialog.menu hr {
     border-left: none;
   }
 
-  /* Landing Page CSS Mobile*/
-  .landing__page {
-    overflow-x: scroll;
+  .landing__page__section {
+    flex-direction: column;
+  }
+
+  .landing__page__header {
+    flex-direction: column;
+  }
+
+  .landing__page__title {
+    font-size: 45px;
+  }
+
+  .landing__page__logo {
+    margin-bottom: 1em;
+  }
+
+  .landing__page__description {
+    font-size: 16px;
+    width: 70%;
   }
 }
 
