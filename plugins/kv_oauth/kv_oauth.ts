@@ -9,8 +9,6 @@ export const SESSION_DURATION_MS = SESSION_DURATION_SECONDS * 1e3;
 
 export const oauthConfig = createGitHubOAuthConfig();
 
-const PROD_DOMAIN = Deno.env.get("PROD_DOMAIN");
-
 export const {
   signIn,
   handleCallback,
@@ -22,8 +20,6 @@ export const {
     cookieOptions: {
       maxAge: SESSION_DURATION_SECONDS,
       httpOnly: true,
-      secure: true,
-      domain: PROD_DOMAIN ? PROD_DOMAIN : undefined,
     },
   },
 );
