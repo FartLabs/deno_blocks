@@ -7,7 +7,6 @@ export default function DenoBlocksIDEIsland() {
   const blocklyRef = useRef<HTMLDivElement>(null);
   const outputPanelRef = useRef<HTMLDivElement>(null);
   const codeRef = useRef<HTMLElement>(null);
-  const denoBlocksCompilerOutputRef = useRef<HTMLElement>(null);
 
   // TODO: Load workspace from Deno KV by session ID. Listen for server-sent
   // events to update the workspace.
@@ -64,7 +63,7 @@ export default function DenoBlocksIDEIsland() {
             }
           }}
         >
-          <DenoBlocksIcon />
+          <DenoBlocksIcon size="52px" />
         </div>
       </nav>
 

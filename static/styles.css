@@ -142,7 +142,6 @@ form {
   height: 100%;
   color: #00cc00;
   overflow-y: auto;
-  padding: -10px;
 }
 
 .generated-code {
@@ -174,6 +173,10 @@ dialog.menu::backdrop {
     green
   );
   opacity: 0.5;
+}
+
+dialog.menu h2 {
+  padding: 1em 0;
 }
 
 /* Less than 1000px */
