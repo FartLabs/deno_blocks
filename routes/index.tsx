@@ -42,7 +42,7 @@ export default async function IndexPage() {
             <img src="/github_logo.svg" alt="Github Logo" />
             <a class="landing__page__signin__text" href="/signin">Sign In</a>
           </div>
-          <a class="landing__page__openide__text" href="/">Open IDE</a>
+          <a class="landing__page__openide__text" href="/recent">Open IDE</a>
         </div>
         <div class="landing__page__image">
           <picture>
