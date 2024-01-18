@@ -58,6 +58,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
     }
 
     window.history.pushState({}, "", `/projects/${projectID}`);
+    window.location.reload();
   }
 
   function handleRefreshIframeButtonClick() {
