@@ -25,8 +25,5 @@
     "boolean/": "https://deno.land/x/boolean@0.0.1/",
     "#/": "./"
   },
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact"
-  }
+  "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" }
 }
