@@ -227,6 +227,11 @@ dialog.menu hr {
   border-radius: 3em;
   margin-top: 1em;
   margin-right: 1em;
+  transition: scale 0.1s ease;
+}
+
+.landing__page__sourcecode:hover {
+  scale: 1.1;
 }
 
 .landing__page__documentation {
@@ -241,6 +246,11 @@ dialog.menu hr {
   text-decoration: none;
   color: white;
   font-size: 20px;
+  transition: scale 0.1s ease;
+}
+
+.landing__page__documentation:hover {
+  scale: 1.1;
 }
 
 .landing__page__section {
@@ -295,7 +305,7 @@ dialog.menu hr {
   align-items: center;
   width: 100%;
   padding: 0 2em;
-  margin-bottom: 2em;
+  margin: 2em;
 }
 
 .landing__page__signin {
@@ -311,11 +321,11 @@ dialog.menu hr {
   text-decoration: none;
   color: white;
   font-size: 20px;
-  transition: font-size 0.3s ease;
+  transition: scale 0.1s ease;
 }
 
 .landing__page__signin:hover {
-  font-size: 22px;
+  scale: 1.1;
 }
 
 .landing__page__openide__text {
@@ -326,7 +336,7 @@ dialog.menu hr {
   background: black;
   padding: 1em;
   border-radius: 2em;
-  margin: 1em 0;
+  margin-top: 0.5em;
   text-decoration: none;
   color: white;
   font-size: 20px;
