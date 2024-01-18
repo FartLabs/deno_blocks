@@ -1,22 +1,24 @@
 import { useEffect, useRef } from "preact/hooks";
 import { denoBlockly } from "#/lib/blockly/examples/deno_blockly/mod.ts";
 import DenoBlocksIcon from "#/components/deno_blocks_icon.tsx";
-import type { SubhostingAPIProject } from "#/lib/subhosting_api/mod.ts";
+import type { DenoBlocksUser } from "#/lib/deno_blocks_kv/mod.ts";
 
-export default function DenoBlocksIDEIsland() {
+export interface DenoBlocksIDEIslandProps {
+  user: DenoBlocksUser;
+}
+
+export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
   const blocklyRef = useRef<HTMLDivElement>(null);
   const outputPanelRef = useRef<HTMLDivElement>(null);
   const codeRef = useRef<HTMLElement>(null);
 
-  // TODO: Load workspace from Deno KV by session ID. Listen for server-sent
+  // TODO: Load workspace from Deno Kv by session ID. Listen for server-sent
   // events to update the workspace.
   // https://github.com/denoland/showcase_todo/blob/main/islands/TodoListView.tsx#L41
   //
-  // TODO: Load projects from Deno KV by session ID.
+  // TODO: Load projects from Deno Kv by session ID.
   // https://github.com/denoland/subhosting_ide_starter/blob/main/main.tsx
   //
-
-  const projects: SubhostingAPIProject[] = [];
 
   function handleIconClick() {
     const dialogElement = document.querySelector<HTMLDialogElement>(
@@ -93,26 +95,37 @@ export default function DenoBlocksIDEIsland() {
           <h2>Deno Blocks</h2>
           <p>
             <label for="menu-project-input">Project:</label>
+            <br />
             <select name="menu-project-input">
-              <option></option>
-              {projects.map((project) => (
-                <option value={project.id}>{project.name}</option>
-              ))}
-              {/* Test Data: */}
-              <option>Brine shrimp</option>
-              <option>Red panda</option>
-              <option>Spider monkey</option>
+              {props.user.projects.length === 0
+                ? <option value="">No projects</option>
+                : props.user.projects.map((project) => (
+                  <option value={project.id}>{project.name}</option>
+                ))}
             </select>
-          </p>
-          <div>
-            {/* <button class="menu-create-button">Create new project</button> */}
+            <hr />
+            <a href="/github">GitHub repository</a>
+            <hr />
+            <a href="/signout">Sign out</a>
+            <hr />
+            <button
+              class="menu-create-button"
+              formAction="/api/projects"
+              formMethod="post"
+              type="submit"
+              role="button"
+              aria-label="Create new project"
+              title="Create new project"
+            >
+              Create new project
+            </button>
             <button
               class="menu-close-button"
               type="submit"
             >
               Close
             </button>
-          </div>
+          </p>
         </form>
 
         {

@@ -179,6 +179,10 @@ dialog.menu h2 {
   padding: 1em 0;
 }
 
+dialog.menu hr {
+  margin: 1em 0;
+}
+
 /* Less than 1000px */
 @media screen and (max-width: 999px) {
   .panel-container {
