@@ -14,7 +14,7 @@ import { storageKey } from "./storage_key.ts";
 // https://developers.google.com/blockly/guides/create-custom-blocks/block-colour
 const HTTP_COLOUR = "0";
 const CRON_COLOUR = "270";
-const DISCORD_COLOUR = "#5865F2"; // Blurple.
+// const DISCORD_COLOUR = "#5865F2"; // Blurple.
 
 const GET_DENO_BLOCKLY_TOOLBOX =
   (): Blockly.utils.toolbox.ToolboxDefinition => {
@@ -59,32 +59,9 @@ const GET_DENO_BLOCKLY_TOOLBOX =
             },
           ],
         },
-        {
-          "kind": "category",
-          "name": "Discord",
-          "colour": DISCORD_COLOUR,
-          "contents": [
-            {
-              "kind": "block",
-              "type": "on_discord_message_interaction_event",
-            },
-            {
-              "kind": "block",
-              "type": "discord_message_interaction_event_handler",
-            },
-            {
-              "kind": "block",
-              "type": "on_discord_user_interaction_event",
-            },
-            {
-              "kind": "block",
-              "type": "discord_user_interaction_event_handler",
-            },
-          ],
-        },
         // TODO: Add Kv watch category.
         // TODO: Add Kv queues category.
-        // TODO: Add mapper block that is a function that maps one type to another.
+        // TODO: Add Discord category.
         //
       ],
     };
@@ -219,11 +196,6 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
     nextStatement: null,
   },
 ];
-
-enum Order {
-  ATOMIC,
-}
-
 const handlersIdentifier = "__HTTP_REQUEST_EVENT_HANDLERS";
 
 const GET_DENO_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
