@@ -1,6 +1,5 @@
 import { getSessionId } from "deno_kv_oauth/mod.ts";
 import { denoBlocksKv } from "#/lib/resources/deno_blocks_kv.ts";
-import DenoBlocksIDEIsland from "#/islands/deno_blocks_ide_island.tsx";
 
 export default async function HomePage(request: Request) {
   const sessionID = await getSessionId(request);
@@ -21,5 +20,5 @@ export default async function HomePage(request: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  return <DenoBlocksIDEIsland user={user} />;
+  return <p>Hello, {user.githubUsername}</p>;
 }

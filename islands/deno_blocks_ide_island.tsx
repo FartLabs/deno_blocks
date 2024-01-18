@@ -2,9 +2,11 @@ import { useEffect, useRef } from "preact/hooks";
 import { denoBlockly } from "#/lib/blockly/examples/deno_blockly/mod.ts";
 import DenoBlocksIcon from "#/components/deno_blocks_icon.tsx";
 import type { DenoBlocksUser } from "#/lib/deno_blocks_kv/mod.ts";
+import type { SubhostingAPIProject } from "#/lib/subhosting_api/mod.ts";
 
 export interface DenoBlocksIDEIslandProps {
   user: DenoBlocksUser;
+  project: SubhostingAPIProject;
 }
 
 export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
@@ -44,6 +46,16 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
     }
 
     iframeElement.src = `https://${deploymentId}.deno.dev`;
+  }
+
+  function handleProjectChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const projectID = selectElement.value;
+    if (!projectID) {
+      return;
+    }
+
+    window.location.href = `/projects/${projectID}`;
   }
 
   function handleRefreshIframeButtonClick() {
@@ -96,7 +108,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
           <p>
             <label for="menu-project-input">Select project:</label>
             <br />
-            <select name="menu-project-input">
+            <select name="menu-project-input" onChange={handleProjectChange}>
               {props.user.projects.length === 0
                 ? <option value="">No projects</option>
                 : props.user.projects.map((project) => (
