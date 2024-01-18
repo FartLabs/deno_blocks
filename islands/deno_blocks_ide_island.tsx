@@ -38,15 +38,12 @@ export default function DenoBlocksIDEIsland() {
       throw new Error("codeRef.current is null");
     }
 
-    // Test.
-    codeRef.current.innerText = "console.log('Hello, world!');";
-
     // Set up Deno Blockly.
     denoBlockly({
       blocklyElement: blocklyRef.current,
       codeElement: codeRef.current,
     });
-  }, [blocklyRef, codeRef]);
+  }, [denoBlockly, blocklyRef, codeRef]);
 
   return (
     <>
