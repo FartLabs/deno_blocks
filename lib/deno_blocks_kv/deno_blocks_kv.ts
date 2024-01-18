@@ -46,6 +46,19 @@ export interface GetUserBySessionIDRequest {
   sessionID: string;
 }
 
+// Attention: Read projects by user's projects property.
+export interface AddProjectRequest {
+  project: SubhostingAPIProject;
+}
+
+export interface AddDeploymentRequest {
+  deployment: SubhostingAPIDeployment;
+}
+
+export interface GetDeploymentsByProjectIDRequest {
+  projectID: string;
+}
+
 export class DenoBlocksKv {
   constructor(
     private readonly kv: Deno.Kv,
@@ -84,6 +97,76 @@ export class DenoBlocksKv {
       .commit();
     if (!result.ok) {
       throw new Error("Failed to create user");
+    }
+  }
+
+  public async addSession(request: AddSessionRequest): Promise<void> {
+    const usersByIDKey = this.k(
+      DenoBlocksKvKeyPrefix.USERS_BY_ID,
+      request.userID,
+    );
+    const usersByIDResult = await this.kv.get<DenoBlocksUser>(usersByIDKey);
+    if (!usersByIDResult.value) {
+      throw new Error("User not found");
+    }
+
+    const user = usersByIDResult.value;
+    const userIDsBySessionIDKey = this.k(
+      DenoBlocksKvKeyPrefix.USER_IDS_BY_SESSION_ID,
+      request.sessionID,
+    );
+    const result = await this.kv.atomic()
+      .check(usersByIDResult)
+      .set(userIDsBySessionIDKey, user.id)
+      .commit();
+    if (!result.ok) {
+      throw new Error("Failed to add session");
+    }
+  }
+
+  public async getUserBySessionID(
+    request: GetUserBySessionIDRequest,
+  ): Promise<DenoBlocksUser | null> {
+    const userIDsBySessionIDKey = this.k(
+      DenoBlocksKvKeyPrefix.USER_IDS_BY_SESSION_ID,
+      request.sessionID,
+    );
+    const userIDsBySessionIDResult = await this.kv.get<string>(
+      userIDsBySessionIDKey,
+    );
+    if (!userIDsBySessionIDResult.value) {
+      return null;
+    }
+
+    const usersByIDKey = this.k(
+      DenoBlocksKvKeyPrefix.USERS_BY_ID,
+      userIDsBySessionIDResult.value,
+    );
+    const usersByIDResult = await this.kv.get<DenoBlocksUser>(usersByIDKey);
+    return usersByIDResult.value;
+  }
+
+  // TODO: Implement delete deployment and delete project.
+  public async addDeployment(request: AddDeploymentRequest): Promise<void> {
+    const deploymentsByProjectIDKey = this.k(
+      DenoBlocksKvKeyPrefix.DEPLOYMENTS_BY_PROJECT_ID,
+      request.deployment.projectId,
+    );
+    const deploymentsByProjectIDResult = await this.kv.get<
+      SubhostingAPIDeployment[]
+    >(deploymentsByProjectIDKey);
+    const deployments = deploymentsByProjectIDResult.value ?? [];
+    if (deployments.find((d) => d.id === request.deployment.id)) {
+      throw new Error("Deployment already exists");
+    }
+
+    deployments.push(request.deployment);
+    const result = await this.kv.atomic()
+      .check(deploymentsByProjectIDResult)
+      .set(deploymentsByProjectIDKey, deployments)
+      .commit();
+    if (!result.ok) {
+      throw new Error("Failed to add deployment");
     }
   }
 }
