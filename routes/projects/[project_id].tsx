@@ -18,7 +18,12 @@ export default async function ProjectPage(
 
   const sessionID = await getSessionId(request);
   if (!sessionID) {
-    return new Response("Unauthorized", { status: 401 });
+    return new Response("", {
+      status: 302,
+      headers: {
+        Location: `/signin?success_url=/projects/${projectID}`,
+      },
+    });
   }
 
   // List project from Kv that are owned by the user.

@@ -19,6 +19,7 @@ export const {
   {
     cookieOptions: {
       maxAge: SESSION_DURATION_SECONDS,
+      httpOnly: true,
     },
   },
 );
@@ -69,7 +70,16 @@ export const kvOAuthPlugin = (): Plugin => ({
     {
       path: "/signout",
       async handler(request) {
-        return await signOut(request);
+        try {
+          // Update the redirect URL to the homepage.
+          const response = await signOut(request);
+          response.headers.set("Location", "/");
+          console.log({ response });
+          return response;
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
       },
     },
     {

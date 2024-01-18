@@ -28,7 +28,12 @@ export const handler: Handlers = {
       return new Response("Unauthorized", { status: 401 });
     }
 
-    return Response.json(projects);
+    return new Response(
+      JSON.stringify(projects.reverse()),
+      {
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   },
   async POST(request: Request) {
     const sessionID = await getSessionId(request);
@@ -49,6 +54,11 @@ export const handler: Handlers = {
       accessToken: DEPLOY_ACCESS_TOKEN,
     });
     await denoBlocksKv.addProject({ userID, project });
-    return Response.json(project);
+    return new Response(
+      JSON.stringify(project),
+      {
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   },
 };

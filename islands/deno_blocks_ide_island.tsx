@@ -294,7 +294,17 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
                 <a href="/github">GitHub repository</a>
               </li>
               <li>
-                <a href="/signout">Sign out</a>
+                <a
+                  href="/signout"
+                  title="Sign out"
+                  aria-label="Sign out"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    window.location.href = "/signout";
+                  }}
+                >
+                  Sign out
+                </a>
               </li>
             </ul>
             <hr />
@@ -382,7 +392,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
                 style="width: 100%; border-radius: 4px; padding: 0.5rem; background-color: #eee;"
                 class="deployments-address"
               >
-                {deploymentDomain}
+                <input type="text" value={deploymentDomain} readonly />
                 <input
                   class="deployments-address-input"
                   type="text"
