@@ -182,6 +182,16 @@ dialog.menu::backdrop {
   margin: 0;
 }
 
+.landing__page__buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
+  padding: 0.5em;
+  border-radius: 3em;
+  margin-top: 2em;
+}
+
 .landing__page__section {
   display: flex;
   flex-direction: row;

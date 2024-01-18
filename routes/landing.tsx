@@ -3,6 +3,11 @@ import DenoBlocksIcon from "#/components/deno_blocks_icon.tsx";
 export default function LandingPage() {
   return (
     <section class="landing__page">
+      <div class="landing__page__buttons">
+        <a class="landing__page__sourcecode" href="https://etok.codes/deno_blocks">
+          <img src="github_logo.svg" alt="Github Logo" />
+        </a>
+      </div>
       <div class="landing__page__section">
         <div class="landing__page__content">
           <div class="landing__page__header">
@@ -28,18 +33,17 @@ export default function LandingPage() {
         <div class="landing__page__image">
           <img src="/landing_page_image.png" alt="Deno Blocks" />
         </div>
-        
+      </div>
+      <div class="landing__page__footer">
+        <div class="landing_page_footer_content">
+          <p class="landing__page__footer__text1">
+            Logo Artwork Credit:{" "}
+            <a href="https://twitter.com/_tanakaworld">@_tanakaworld</a>
+          </p>
+          <p class="landing__page__footer__text1">
+            Deno Blocks built with 🦕
+          </p>
         </div>
-        <div class="landing__page__footer">
-          <div class="landing_page_footer_content">
-            <p class="landing__page__footer__text1">
-              Logo Artwork Credit:{" "}
-              <a href="https://twitter.com/_tanakaworld">@_tanakaworld</a>
-            </p>
-            <p class="landing__page__footer__text1">
-              Deno Blocks built with 🦕
-            </p>
-          </div>
       </div>
     </section>
   );
