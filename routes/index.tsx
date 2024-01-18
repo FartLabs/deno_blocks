@@ -1,4 +1,7 @@
-export default async function IndexPage() {
+import { getSessionId } from "deno_kv_oauth/mod.ts";
+
+export default async function IndexPage(request: Request) {
+  const sessionID = await getSessionId(request);
   return (
     <section class="landing__page">
       <div class="landing__page__buttons">
@@ -38,11 +41,25 @@ export default async function IndexPage() {
             that allows developers to play/access/move Deno's automatic
             instrumentation and other powerful features.
           </p>
-          <div class="landing__page__signin">
-            <img src="/github_logo.svg" alt="Github Logo" />
-            <a class="landing__page__signin__text" href="/signin">Sign In</a>
-          </div>
-          <a class="landing__page__openide__text" href="/recent">Open IDE</a>
+          {sessionID
+            ? (
+              <>
+                <a class="landing__page__openide__text" href="/recent">
+                  Open IDE
+                </a>
+                <a class="landing__page__openide__text" href="/signout">
+                  Sign out
+                </a>
+              </>
+            )
+            : (
+              <div class="landing__page__signin">
+                <img src="/github_logo.svg" alt="Github Logo" />
+                <a class="landing__page__signin__text" href="/signin">
+                  Sign In
+                </a>
+              </div>
+            )}
         </div>
         <div class="landing__page__image">
           <picture>
