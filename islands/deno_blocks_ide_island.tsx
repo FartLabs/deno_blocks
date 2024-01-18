@@ -108,8 +108,16 @@ export default function DenoBlocksIDEIsland() {
         }
       </dialog>
 
+      <noscript>
+        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1000; background-color: white; height: 100vh; width: 100vw;">
+          <p style="color: red; font-weight: bold; text-align: center; height: 100vh; display: flex; align-items: center; justify-content: center;">
+            The Deno Blocks IDE requires JavaScript.<br />Please enable
+            JavaScript in your browser and reload the page.
+          </p>
+        </div>
+      </noscript>
+
       <main>
-        {/* TODO: Define panels */}
         <div class="panel-container">
           <div class="blockly-panel">
             <div class="blockly" ref={blocklyRef} />
@@ -121,12 +129,6 @@ export default function DenoBlocksIDEIsland() {
 
               <pre class="generated-code"><code ref={codeRef}/></pre>
             </details>
-            <details open>
-              <summary>Deno Blocks compiler output</summary>
-
-              <pre class="deno-blocks-compiler-output"><code ref={denoBlocksCompilerOutputRef}/></pre>
-            </details>
-            {/* <output class="output" /> */}
           </div>
         </div>
       </main>
