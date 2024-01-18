@@ -22,7 +22,7 @@ export default function IndexPage() {
                   srcset="/deno-blocks-icon-frame-0.gif"
                   media="(prefers-reduced-motion: reduce)"
                 />
-                <img src="/deno-blocks-icon.gif" alt="Deno Blocks Icon" />
+                <img src="/deno-blocks-icon.gif" alt="Deno Blocks Icon"  style="image-rendering: pixelated;" />
               </picture>
             </div>
           </div>
