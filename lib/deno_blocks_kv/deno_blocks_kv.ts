@@ -6,7 +6,7 @@ export enum DenoBlocksKvKeyPrefix {
   USERS_BY_ID = "users_by_id",
   USERS_BY_GITHUB_USER_ID = "users_by_github_user_id",
   USER_IDS_BY_SESSION_ID = "user_ids_by_session_id",
-  WORKSPACES_BY_PROJECT_ID = "workspaces_by_project_id",
+  STRINGIFIED_WORKSPACES_BY_PROJECT_ID = "stringified_workspaces_by_project_id",
 }
 
 export interface DenoBlocksUser {
@@ -72,6 +72,15 @@ export interface GetUserBySessionIDRequest {
 
 export interface GetProjectsByUserIDRequest {
   id: string;
+}
+
+export interface GetStringifiedWorkspaceByProjectIDRequest {
+  projectID: string;
+}
+
+export interface SetStringifiedWorkspaceRequest {
+  projectID: string;
+  stringifiedWorkspace: string;
 }
 
 /**
@@ -233,12 +242,17 @@ export class DenoBlocksKv {
       throw new Error("User not found");
     }
 
+    const stringifiedWorkspacesByProjectIDKey = this.k(
+      DenoBlocksKvKeyPrefix.STRINGIFIED_WORKSPACES_BY_PROJECT_ID,
+      request.projectID,
+    );
     const user = usersByIDResult.value;
     user.projects = user.projects
       .filter((project) => project.id !== request.projectID);
     const result = await this.kv.atomic()
       .check(usersByIDResult)
       .set(usersByIDKey, user)
+      .delete(stringifiedWorkspacesByProjectIDKey)
       .commit();
     if (!result.ok) {
       throw new Error("Failed to delete project");
@@ -256,5 +270,34 @@ export class DenoBlocksKv {
     }
 
     return await this.getUserByID({ id: userID });
+  }
+
+  public async getStringifiedWorkspaceByProjectID(
+    request: GetStringifiedWorkspaceByProjectIDRequest,
+  ): Promise<string | null> {
+    const stringifiedWorkspacesByProjectIDKey = this.k(
+      DenoBlocksKvKeyPrefix.STRINGIFIED_WORKSPACES_BY_PROJECT_ID,
+      request.projectID,
+    );
+    const stringifiedWorkspacesByProjectIDResult = await this.kv.get<string>(
+      stringifiedWorkspacesByProjectIDKey,
+    );
+    return stringifiedWorkspacesByProjectIDResult.value;
+  }
+
+  public async setStringifiedWorkspace(
+    request: SetStringifiedWorkspaceRequest,
+  ): Promise<void> {
+    const stringifiedWorkspacesByProjectIDKey = this.k(
+      DenoBlocksKvKeyPrefix.STRINGIFIED_WORKSPACES_BY_PROJECT_ID,
+      request.projectID,
+    );
+    const result = await this.kv.set(
+      stringifiedWorkspacesByProjectIDKey,
+      request.stringifiedWorkspace,
+    );
+    if (!result.ok) {
+      throw new Error("Failed to add stringified workspace");
+    }
   }
 }

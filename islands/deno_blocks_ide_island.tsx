@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "preact/hooks";
+import { default as Blockly } from "blockly";
 import { denoBlockly } from "#/lib/blockly/examples/deno_blockly/mod.ts";
 import DenoBlocksIcon from "#/components/deno_blocks_icon.tsx";
 import type { DenoBlocksUser } from "#/lib/deno_blocks_kv/mod.ts";
@@ -7,6 +8,7 @@ import type { SubhostingAPIProject } from "#/lib/subhosting_api/mod.ts";
 export interface DenoBlocksIDEIslandProps {
   user: DenoBlocksUser;
   project: SubhostingAPIProject;
+  stringifiedWorkspace: string | null;
 }
 
 export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
@@ -64,7 +66,9 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
       return;
     }
 
-    iframeElement.contentWindow.location.href = iframeElement.src;
+    if (iframeElement && iframeElement.contentWindow) {
+      iframeElement.contentWindow.location.href = iframeElement.src;
+    }
   }
 
   useEffect(() => {
@@ -80,12 +84,28 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
     denoBlockly({
       blocklyElement: blocklyRef.current,
       codeElement: codeRef.current,
-      // TODO: Load workspace from Deno Kv.
-      // getInitialWorkspace: () => props.initialWorkspace,
-      // onWorkspaceChange: (workspace) => {
-      //   // TODO: Save workspace to Deno Kv via API endpoint.
-      //   console.log(workspace);
-      // },
+      getInitialWorkspace: () => {
+        return JSON.parse(props.stringifiedWorkspace ?? "null");
+      },
+      onWorkspaceChange: (workspace) => {
+        // TODO: Save workspace to Deno Kv via API endpoint.
+        fetch(`/api/projects/${props.project.id}/workspace`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(
+            Blockly.serialization.workspaces.save(workspace),
+          ),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                `Failed to save workspace: ${response.status} ${response.statusText}`,
+              );
+            }
+          });
+      },
     });
   }, [denoBlockly, blocklyRef, codeRef]);
 
@@ -169,7 +189,8 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
         Delete project
         Fork to edit/run
         Import library
-        Share project */
+        Share project
+        Delete project */
         }
       </dialog>
 

@@ -36,5 +36,15 @@ export default async function ProjectPage(
     return new Response("Not found", { status: 404 });
   }
 
-  return <DenoBlocksIDEIsland user={user} project={project} />;
+  // Get the workspace from the project.
+  const stringifiedWorkspace = await denoBlocksKv
+    .getStringifiedWorkspaceByProjectID({ projectID });
+
+  return (
+    <DenoBlocksIDEIsland
+      user={user}
+      project={project}
+      stringifiedWorkspace={stringifiedWorkspace}
+    />
+  );
 }
