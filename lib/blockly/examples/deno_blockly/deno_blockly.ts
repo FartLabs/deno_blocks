@@ -250,7 +250,7 @@ const GET_DENO_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
 const ${handlersIdentifier} = [];
 ${code}
 Deno.serve(async (request) => {
-  for (const handler of ${handlersIdentifier}}) {
+  for (const handler of ${handlersIdentifier}) {
     const response = await handler(request);
     if (response) {
       return response;

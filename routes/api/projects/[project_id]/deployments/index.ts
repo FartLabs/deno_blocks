@@ -38,10 +38,8 @@ export const handler: Handlers = {
       return new Response("Failed to list deployments", { status: 500 });
     }
 
-    console.log({ deployments, user });
-
     return new Response(
-      JSON.stringify(deployments),
+      JSON.stringify(deployments.reverse()),
       {
         headers: { "Content-Type": "application/json" },
       },
@@ -69,7 +67,7 @@ export const handler: Handlers = {
     }
 
     // Deploy project with Subhosting API.
-    const code = await request.text();
+    const { code, envVars = {} } = await request.json();
     const deployment = await createDeployment({
       projectId: projectID,
       entryPointUrl: "main.ts",
@@ -80,7 +78,7 @@ export const handler: Handlers = {
           encoding: "utf-8",
         },
       },
-      envVars: {}, // TODO: Add input for env vars.
+      envVars,
       importMapUrl: null,
       lockFileUrl: null,
       compilerOptions: null,
@@ -90,8 +88,6 @@ export const handler: Handlers = {
     if (!deployment) {
       return new Response("Failed to deploy", { status: 500 });
     }
-
-    console.log({ deployment, user });
 
     return new Response(
       JSON.stringify(deployment),

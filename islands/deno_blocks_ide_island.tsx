@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { default as Blockly } from "blockly";
 import { denoBlockly } from "#/lib/blockly/examples/deno_blockly/mod.ts";
 import DenoBlocksIcon from "#/components/deno_blocks_icon.tsx";
@@ -11,7 +11,6 @@ import type {
 export interface DenoBlocksIDEIslandProps {
   user: DenoBlocksUser;
   project: SubhostingAPIProject;
-  deployments: SubhostingAPIDeployment[];
   stringifiedWorkspace: string | null;
 }
 
@@ -19,6 +18,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
   const blocklyRef = useRef<HTMLDivElement>(null);
   const outputPanelRef = useRef<HTMLDivElement>(null);
   const codeRef = useRef<HTMLElement>(null);
+  const [deploymentDomain, setDeploymentDomain] = useState<string>("");
 
   // TODO: Load workspace from Deno Kv by session ID. Listen for server-sent
   // events to update the workspace.
@@ -41,17 +41,22 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
 
   function handleDeploymentChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    const deploymentId = selectElement.value;
-    if (!deploymentId) {
+    const deployedDomain = selectElement.value;
+    if (!deployedDomain) {
+      alert("Cannot load a failed deployment.");
       return;
     }
 
-    const iframeElement = outputPanelRef.current?.querySelector("iframe");
+    // Only successful deployments have a domain.
+    const iframeElement = outputPanelRef.current?.querySelector<
+      HTMLIFrameElement
+    >("iframe.deployments-iframe");
     if (!iframeElement) {
       return;
     }
 
-    iframeElement.src = `https://${deploymentId}.deno.dev`;
+    iframeElement.src = `https://${deployedDomain}`;
+    setDeploymentDomain(deployedDomain);
   }
 
   function handleProjectChange(event: Event) {
@@ -65,24 +70,40 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
   }
 
   function handleRefreshIframeButtonClick() {
-    const iframeElement = outputPanelRef.current?.querySelector("iframe");
+    const iframeElement = outputPanelRef.current?.querySelector<
+      HTMLIFrameElement
+    >(
+      "iframe.deployments-iframe",
+    );
     if (!iframeElement?.contentWindow) {
       return;
     }
 
     if (iframeElement && iframeElement.contentWindow) {
-      iframeElement.contentWindow.location.href = iframeElement.src;
+      const inputElement = outputPanelRef.current?.querySelector<
+        HTMLInputElement
+      >("input.deployments-address-input");
+      if (!inputElement) {
+        return;
+      }
+
+      const destination = iframeElement.src +
+        inputElement.value;
+      iframeElement.contentWindow.location.href = destination;
     }
   }
 
   function handleDeployButtonClick() {
     const code = codeRef.current?.innerText;
-    console.log("Deploying project...", { code });
     fetch(
       `/api/projects/${props.project.id}/deployments`,
       {
         method: "POST",
-        body: code,
+        body: JSON.stringify({
+          code,
+          // TODO: Add input for env vars.
+          envVars: {},
+        }),
       },
     )
       .then((response) => {
@@ -91,12 +112,71 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
             `Failed to deploy project: ${response.status} ${response.statusText}`,
           );
         }
-
-        // TODO: Set timeout to update deployments list.
       })
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  function pollUpdateDeployments() {
+    function updateDeployments() {
+      fetch(
+        `/api/projects/${props.project.id}/deployments`,
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Failed to get deployments: ${response.status} ${response.statusText}`,
+            );
+          }
+
+          return response.json();
+        })
+        .then((deployments: SubhostingAPIDeployment[]) => {
+          const selectElement = document.querySelector<HTMLSelectElement>(
+            "select.deployments",
+          );
+          const selectElementValue = selectElement?.value;
+          if (selectElement) {
+            selectElement.innerHTML = "";
+            deployments.forEach((deployment) => {
+              const optionElement = document.createElement("option");
+              optionElement.value = deployment.domains?.[0] ?? "";
+              optionElement.innerText =
+                `${deployment.id} (${deployment.status})`;
+              selectElement.appendChild(optionElement);
+            });
+
+            // Restore the selected deployment.
+            if (selectElementValue) {
+              selectElement.value = selectElementValue;
+
+              // Update the deployment domain.
+              if (selectElement.value !== deploymentDomain) {
+                setDeploymentDomain(selectElement.value);
+
+                // Update the iframe.
+                const iframeElement = outputPanelRef.current?.querySelector<
+                  HTMLIFrameElement
+                >("iframe.deployments-iframe");
+                const destination = `https://${selectElement.value}`;
+                if (iframeElement && iframeElement.src !== destination) {
+                  console.log(`Updating iframe to ${destination}`); // TODO: Fix polling.
+                  iframeElement.src = destination;
+                }
+              }
+            }
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
+    updateDeployments();
+    setInterval(() => {
+      updateDeployments();
+    }, 3e3);
   }
 
   function handleDeleteProjectButtonClick() {
@@ -123,43 +203,48 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
     window.location.href = "/new";
   }
 
-  useEffect(() => {
-    if (!blocklyRef.current) {
-      throw new Error("blocklyRef.current is null");
-    }
+  useEffect(
+    () => {
+      if (!blocklyRef.current) {
+        throw new Error("blocklyRef.current is null");
+      }
 
-    if (!codeRef.current) {
-      throw new Error("codeRef.current is null");
-    }
+      if (!codeRef.current) {
+        throw new Error("codeRef.current is null");
+      }
 
-    // Set up Deno Blockly.
-    denoBlockly({
-      blocklyElement: blocklyRef.current,
-      codeElement: codeRef.current,
-      getInitialWorkspace: () => {
-        return JSON.parse(props.stringifiedWorkspace ?? "null");
-      },
-      onWorkspaceChange: (workspace) => {
-        // TODO: Save workspace to Deno Kv via API endpoint.
-        fetch(`/api/projects/${props.project.id}/workspace`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(
-            Blockly.serialization.workspaces.save(workspace),
-          ),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                `Failed to save workspace: ${response.status} ${response.statusText}`,
-              );
-            }
-          });
-      },
-    });
-  }, [denoBlockly, blocklyRef, codeRef]);
+      // Set up Deno Blockly.
+      denoBlockly({
+        blocklyElement: blocklyRef.current,
+        codeElement: codeRef.current,
+        getInitialWorkspace: () => {
+          return JSON.parse(props.stringifiedWorkspace ?? "null");
+        },
+        onWorkspaceChange: (workspace) => {
+          fetch(`/api/projects/${props.project.id}/workspace`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(
+              Blockly.serialization.workspaces.save(workspace),
+            ),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(
+                  `Failed to save workspace: ${response.status} ${response.statusText}`,
+                );
+              }
+            });
+        },
+      });
+
+      // Set timeout to update deployments list.
+      pollUpdateDeployments();
+    },
+    [denoBlockly, blocklyRef, codeRef],
+  );
 
   return (
     <>
@@ -286,23 +371,37 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
             </details>
             <details open>
               <summary>Deployments</summary>
-              <select onChange={handleDeploymentChange}>
-                <option />
-              </select>
-              <button
-                style="color: black;"
-                onClick={handleRefreshIframeButtonClick}
+              <select
+                onChange={handleDeploymentChange}
+                class="deployments"
+                value={deploymentDomain}
               >
-                Refresh
-              </button>
+              </select>
+              <br />
+              <span
+                style="width: 100%; border-radius: 4px; padding: 0.5rem; background-color: #eee;"
+                class="deployments-address"
+              >
+                {deploymentDomain}
+                <input
+                  class="deployments-address-input"
+                  type="text"
+                  placeholder="/path/to/endpoint"
+                />{" "}
+                <button
+                  style="color: black;"
+                  onClick={handleRefreshIframeButtonClick}
+                >
+                  Refresh
+                </button>
+              </span>
               <br />
               <iframe
                 style="width: 100%; height: 50vh;"
-                src="http://example.com/"
+                class="deployments-iframe"
               />
             </details>
             {/* TODO: Display section for defining environment variables. */}
-            {/* TODO: Display reloadable iframe of selectable deployment URL. */}
           </div>
         </div>
       </main>

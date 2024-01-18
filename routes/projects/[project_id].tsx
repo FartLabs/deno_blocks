@@ -44,19 +44,10 @@ export default async function ProjectPage(
   const stringifiedWorkspace = await denoBlocksKv
     .getStringifiedWorkspaceByProjectID({ projectID });
 
-  // Get the deployments from the project.
-  const deployments = await getDeployments({
-    projectId: projectID,
-    organizationID: DEPLOY_ORG_ID,
-    accessToken: DEPLOY_ACCESS_TOKEN,
-  });
-  console.log({ deployments });
-
   return (
     <DenoBlocksIDEIsland
       user={user}
       project={project}
-      deployments={deployments}
       stringifiedWorkspace={stringifiedWorkspace}
     />
   );

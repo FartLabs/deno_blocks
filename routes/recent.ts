@@ -25,7 +25,6 @@ export const handler: Handlers = {
     }
 
     const recentProjects = projects.sort((a, b) => {
-      console.log({ a, b });
       return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
     });
     const recentProject = recentProjects[0];
