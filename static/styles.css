@@ -336,11 +336,12 @@ dialog.menu hr {
   background: black;
   padding: 1em;
   border-radius: 2em;
-  margin-top: 0.5em;
+  margin-top: 1em;
   text-decoration: none;
   color: white;
   font-size: 20px;
   transition: scale 0.1s ease;
+  min-width: 225px;
 }
 
 .landing__page__openide__text:hover {

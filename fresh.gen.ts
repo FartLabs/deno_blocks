@@ -9,6 +9,7 @@ import * as $api_projects_project_id_deployments_index from "./routes/api/projec
 import * as $api_projects_project_id_index from "./routes/api/projects/[project_id]/index.ts";
 import * as $api_projects_project_id_workspace from "./routes/api/projects/[project_id]/workspace.ts";
 import * as $api_projects_index from "./routes/api/projects/index.ts";
+import * as $docs_index from "./routes/docs/index.tsx";
 import * as $github from "./routes/github.ts";
 import * as $icon from "./routes/icon.tsx";
 import * as $index from "./routes/index.tsx";
@@ -30,6 +31,7 @@ const manifest = {
     "./routes/api/projects/[project_id]/workspace.ts":
       $api_projects_project_id_workspace,
     "./routes/api/projects/index.ts": $api_projects_index,
+    "./routes/docs/index.tsx": $docs_index,
     "./routes/github.ts": $github,
     "./routes/icon.tsx": $icon,
     "./routes/index.tsx": $index,

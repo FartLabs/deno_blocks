@@ -5,7 +5,7 @@ export default async function IndexPage(request: Request) {
   return (
     <section class="landing__page">
       <div class="landing__page__buttons">
-        <a class="landing__page__documentation" href="/github">
+        <a class="landing__page__documentation" href="/docs">
           Docs
         </a>
         <a class="landing__page__sourcecode" href="/github">
