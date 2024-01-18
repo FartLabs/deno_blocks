@@ -94,7 +94,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
         <form method="dialog">
           <h2>Deno Blocks</h2>
           <p>
-            <label for="menu-project-input">Project:</label>
+            <label for="menu-project-input">Select project:</label>
             <br />
             <select name="menu-project-input">
               {props.user.projects.length === 0
@@ -104,7 +104,17 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
                 ))}
             </select>
             <hr />
-            <a href="/github">GitHub repository</a>
+            <ul>
+              <li>
+                <a href="/">Home</a>
+              </li>
+              <li>
+                <a href="/docs">Documentation</a>
+              </li>
+              <li>
+                <a href="/github">GitHub repository</a>
+              </li>
+            </ul>
             <hr />
             <a href="/signout">Sign out</a>
             <hr />
