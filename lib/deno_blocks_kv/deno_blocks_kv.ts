@@ -69,6 +69,10 @@ export interface GetUserBySessionIDRequest {
   sessionID: string;
 }
 
+export interface GetProjectsByUserIDRequest {
+  id: string;
+}
+
 /**
  * Attention:
  * - Read user projects from user's projects property.
@@ -195,6 +199,10 @@ export class DenoBlocksKv {
     }
 
     const user = usersByIDResult.value;
+    if (user.projects.some((project) => project.id === request.project.id)) {
+      throw new Error("Project already exists");
+    }
+
     user.projects.push(request.project);
     const result = await this.kv.atomic()
       .check(usersByIDResult)
@@ -205,10 +213,12 @@ export class DenoBlocksKv {
     }
   }
 
-  public async getProjectsByUserID(userID: string): Promise<
+  public async getProjectsByUserID(
+    request: GetProjectsByUserIDRequest,
+  ): Promise<
     SubhostingAPIProject[] | null
   > {
-    const user = await this.getUserByID({ id: userID });
+    const user = await this.getUserByID({ id: request.id });
     return user?.projects ?? null;
   }
 
@@ -223,9 +233,8 @@ export class DenoBlocksKv {
     }
 
     const user = usersByIDResult.value;
-    user.projects = user.projects.filter((project) =>
-      project.id !== request.projectID
-    );
+    user.projects = user.projects
+      .filter((project) => project.id !== request.projectID);
     const result = await this.kv.atomic()
       .check(usersByIDResult)
       .set(usersByIDKey, user)

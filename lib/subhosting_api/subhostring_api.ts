@@ -473,7 +473,7 @@ export async function getDeploymentAppLogs(
   return await response.json();
 }
 
-// TODO: Add more API methods e.g. delete deployment, etc.
+// TODO: Add more API methods e.g. create kv database, delete kv database, etc.
 // https://docs.deno.com/deploy/api/rest
-// https://github.com/denoland/subhosting_ide_starter/blob/main/subhosting.ts
+// https://docs.deno.com/deploy/api/rest/databases#list-an-organizations-kv-databases
 //
