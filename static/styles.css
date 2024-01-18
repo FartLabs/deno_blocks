@@ -106,19 +106,19 @@ h3 {
 }
 
 a {
-  color: dodgerblue;
+  color: #7289da;
 }
 
 a:hover {
-  color: magenta;
+  color: rgb(56, 81, 203);
 }
 
 a:visited {
-  color: rebeccapurple;
+  color: #6129a6;
 }
 
 ::selection {
-  color: green;
+  color: #7289da;
 }
 
 select,
