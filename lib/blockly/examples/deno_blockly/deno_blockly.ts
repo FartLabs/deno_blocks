@@ -195,6 +195,7 @@ const GET_DENO_BLOCKLY_BLOCKS = () => [
     nextStatement: null,
   },
 ];
+
 const handlersIdentifier = "__HTTP_REQUEST_EVENT_HANDLERS";
 
 const GET_DENO_BLOCKLY_GENERATOR = () => (g: Blockly.CodeGenerator) => {
