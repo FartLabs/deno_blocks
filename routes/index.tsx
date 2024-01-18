@@ -5,8 +5,11 @@ export default async function IndexPage(request: Request) {
   return (
     <section class="landing__page">
       <div class="landing__page__buttons">
+        <a class="landing__page__documentation" href="/github">
+          Docs
+        </a>
         <a class="landing__page__sourcecode" href="/github">
-          <img src="/github_logo.svg" alt="Github Logo" />
+          <img src="/github-logo.svg" alt="Github Logo" />
         </a>
       </div>
       <div class="landing__page__section">
@@ -32,15 +35,15 @@ export default async function IndexPage(request: Request) {
             </div>
           </div>
           <p class="landing__page__description">
-            Play with <strong>Deno Blocks</strong>, an <i>IDE</i> built with
+            Play with <strong>Deno Blocks</strong>, an <strong>IDE</strong>{" "}
+            built with <a href="https://github.com/denoland/fresh">Fresh</a> and
             {" "}
-            <a href="https://github.com/denoland/fresh">Fresh</a> and{" "}
             <a href="https://github.com/google/blockly">Blockly</a> for the{" "}
             <a href="https://deno.com/blog/subhosting-hackathon">
               Deno Subhosting Hackathon
             </a>{" "}
-            that allows developers to drag-and-drop Deno's automatic
-            instrumentation.
+            that empowers developers to visually program on top of Deno's
+            automatic instrumentation.
           </p>
           {sessionID
             ? (
@@ -54,11 +57,12 @@ export default async function IndexPage(request: Request) {
               </>
             )
             : (
-              <div class="landing__page__signin">
-                <img src="/github_logo.svg" alt="Github Logo" />
-                <a class="landing__page__signin__text" href="/signin">
-                  Sign In
+              <div class="landing__page__start">
+                <a class="landing__page__signin" href="/signin">
+                  <img src="/github-logo.svg" alt="Github Logo" />
+                  Sign in with GitHub
                 </a>
+                <a class="landing__page__openide" href="/idk">Open IDE</a>
               </div>
             )}
         </div>
@@ -66,14 +70,14 @@ export default async function IndexPage(request: Request) {
           <picture>
             {/* TODO: Add light mode image. */}
             <source
-              srcset="/landing_page_image.png"
+              srcset="/landing-page-image.png"
               media="(prefers-color-scheme: light)"
             />
             <source
-              srcset="/landing_page_image.png"
+              srcset="/landing-page-image.png"
               media="(prefers-color-scheme: dark)"
             />
-            <img src="/landing_page_image.png" alt="Deno Blocks" />
+            <img src="/landing-page-image.png" alt="Deno Blocks" />
           </picture>
         </div>
       </div>
