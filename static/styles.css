@@ -226,6 +226,29 @@ dialog.menu::backdrop {
   padding: 0 2em;
 }
 
+.landing__page__signin {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  background: black;
+  padding: 0.5em 1.5em;
+  border-radius: 2em;
+  margin-top: 2em;
+}
+
+.landing__page__signin__text {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+}
+
+.landing__page__openide__text {
+  font-size: 18px;
+  margin-top: 0.5em;
+}
+
 /* Less than 1000px */
 @media screen and (max-width: 999px) {
   .panel-container {
@@ -284,5 +307,19 @@ dialog.menu::backdrop {
   .landing__page__image {
     width: 100%;
     padding: 0 2em;
+  }
+
+  .landing__page__signin {
+    padding: 0.3em 1em;
+    margin-top: 0;
+  }
+
+  .landing__page__signin__text {
+    font-size: 18px;
+  }
+
+  .landing__page__openide__text {
+    font-size: 16px;
+    margin: 1em 0;
   }
 }
