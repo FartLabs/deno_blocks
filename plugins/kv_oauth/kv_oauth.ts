@@ -42,7 +42,6 @@ export const kvOAuthPlugin = (): Plugin => ({
         const githubUser = await getGitHubAPIUserByAccessToken(
           tokens.accessToken,
         );
-        console.log({ githubUser });
         let user = await denoBlocksKv.getUserByGitHubUserID({
           githubUserID: githubUser.id.toString(),
         });
@@ -53,12 +52,6 @@ export const kvOAuthPlugin = (): Plugin => ({
             githubUsername: githubUser.login,
           });
         }
-        console.log({
-          user,
-          tokens: {
-            expiresIn: tokens.expiresIn,
-          },
-        });
 
         // Associate session ID with user ID.
         await denoBlocksKv.addSession({
