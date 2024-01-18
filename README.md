@@ -17,6 +17,7 @@ effortlessly provisioned and deployed.
 ## Known issues/future work
 
 - UI accessibility.
+- Add environment variables to deployment.
 
 ## References
 
