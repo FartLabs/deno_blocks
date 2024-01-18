@@ -114,7 +114,7 @@ a:hover {
 }
 
 a:visited {
-  color: #6129a6;
+  color: #c8bc34;
 }
 
 ::selection {
@@ -318,7 +318,7 @@ dialog.menu hr {
   font-size: 22px;
 }
 
-.landing__page__openide {
+.landing__page__openide__text {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -330,16 +330,11 @@ dialog.menu hr {
   text-decoration: none;
   color: white;
   font-size: 20px;
-  transition: font-size 0.3s ease;
+  transition: scale 0.1s ease;
 }
 
-.landing__page__openide:hover {
-  font-size: 22px;
-}
-
-.landing__page__openide__text {
-  font-size: 18px;
-  margin-top: 0.5em;
+.landing__page__openide__text:hover {
+  scale: 1.1;
 }
 
 .landing__page__footer {
@@ -415,7 +410,7 @@ pre span::before {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background-color: #111;
+    --background-color: #202020;
     --text-color: #fff;
     --footer-background-color: #0a0a0a;
   }

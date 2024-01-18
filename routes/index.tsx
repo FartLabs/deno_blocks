@@ -62,7 +62,6 @@ export default async function IndexPage(request: Request) {
                   <img src="/github-logo.svg" alt="Github Logo" />
                   Sign in with GitHub
                 </a>
-                <a class="landing__page__openide" href="/idk">Open IDE</a>
               </div>
             )}
         </div>
