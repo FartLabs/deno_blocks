@@ -19,6 +19,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
   const outputPanelRef = useRef<HTMLDivElement>(null);
   const codeRef = useRef<HTMLElement>(null);
   const deploymentDomainRef = useRef<string | null>(null);
+  const envVarsRef = useRef<Record<string, string>>({});
 
   // TODO: Load workspace from Deno Kv by session ID. Listen for server-sent
   // events to update the workspace.
@@ -27,6 +28,26 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
   // TODO: Load projects from Deno Kv by session ID.
   // https://github.com/denoland/subhosting_ide_starter/blob/main/main.tsx
   //
+
+  function handleEnvVarsChange(event: Event) {
+    const textareaElement = event.target as HTMLTextAreaElement;
+    const envVars = textareaElement.value
+      .split("\n")
+      .map((line) => line.split("="))
+      .reduce((acc, [key, value]) => {
+        if (!key) {
+          return acc;
+        }
+
+        return {
+          ...acc,
+          [key]: value,
+        };
+      }, {});
+
+    envVarsRef.current = envVars;
+    console.log("envVars", envVars);
+  }
 
   function handleIconClick() {
     const dialogElement = document.querySelector<HTMLDialogElement>(
@@ -117,8 +138,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
         method: "POST",
         body: JSON.stringify({
           code,
-          // TODO: Add input for env vars.
-          envVars: {},
+          envVars: envVarsRef.current,
         }),
       },
     )
@@ -418,11 +438,15 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
                 class="deployments-iframe"
               />
             </details>
-            <details open>
-              <summary>Logs</summary>
-              <pre class="logs"><code/></pre>
+            <details class="environment-variables" open>
+              <summary>Environment variables</summary>
+              {/* TODO: Make this blurred out until the user clicks on it. */}
+              <textarea
+                class="environment-variables-textarea"
+                placeholder="KEY=value"
+                onChange={handleEnvVarsChange}
+              />
             </details>
-            {/* Display section for defining environment variables. */}
           </div>
         </div>
       </main>

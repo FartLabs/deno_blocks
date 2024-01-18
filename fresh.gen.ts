@@ -5,7 +5,6 @@
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $api_projects_project_id_ from "./routes/api/projects/[project_id].ts";
-import * as $api_projects_project_id_deployments_deployment_id_logs from "./routes/api/projects/[project_id]/deployments/[deployment_id]/logs.ts";
 import * as $api_projects_project_id_deployments_index from "./routes/api/projects/[project_id]/deployments/index.ts";
 import * as $api_projects_project_id_index from "./routes/api/projects/[project_id]/index.ts";
 import * as $api_projects_project_id_workspace from "./routes/api/projects/[project_id]/workspace.ts";
@@ -24,8 +23,6 @@ const manifest = {
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
     "./routes/api/projects/[project_id].ts": $api_projects_project_id_,
-    "./routes/api/projects/[project_id]/deployments/[deployment_id]/logs.ts":
-      $api_projects_project_id_deployments_deployment_id_logs,
     "./routes/api/projects/[project_id]/deployments/index.ts":
       $api_projects_project_id_deployments_index,
     "./routes/api/projects/[project_id]/index.ts":
