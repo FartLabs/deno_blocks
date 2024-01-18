@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 import { default as Blockly } from "blockly";
 import { denoBlockly } from "#/lib/blockly/examples/deno_blockly/mod.ts";
 import DenoBlocksIcon from "#/components/deno_blocks_icon.tsx";
@@ -18,7 +18,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
   const blocklyRef = useRef<HTMLDivElement>(null);
   const outputPanelRef = useRef<HTMLDivElement>(null);
   const codeRef = useRef<HTMLElement>(null);
-  const [deploymentDomain, setDeploymentDomain] = useState<string>("");
+  const deploymentDomainRef = useRef<string | null>(null);
 
   // TODO: Load workspace from Deno Kv by session ID. Listen for server-sent
   // events to update the workspace.
@@ -55,8 +55,24 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
       return;
     }
 
+    // Only update iframe src if the deployment is changed.
+    if (deploymentDomainRef.current === deployedDomain) {
+      return;
+    }
+
     iframeElement.src = `https://${deployedDomain}`;
-    setDeploymentDomain(deployedDomain);
+    deploymentDomainRef.current = deployedDomain;
+    console.log("Updated iframe src.");
+
+    // Update the address input.
+    const inputElement = outputPanelRef.current?.querySelector<
+      HTMLInputElement
+    >("input.deployments-domain-input");
+    if (!inputElement) {
+      return;
+    }
+
+    inputElement.value = deployedDomain;
   }
 
   function handleProjectChange(event: Event) {
@@ -82,7 +98,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
     if (iframeElement && iframeElement.contentWindow) {
       const inputElement = outputPanelRef.current?.querySelector<
         HTMLInputElement
-      >("input.deployments-address-input");
+      >("input.deployments-pathname-input");
       if (!inputElement) {
         return;
       }
@@ -136,9 +152,13 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
           const selectElement = document.querySelector<HTMLSelectElement>(
             "select.deployments",
           );
-          const selectElementValue = selectElement?.value;
           if (selectElement) {
+            const value = selectElement?.value ?? "";
             selectElement.innerHTML = "";
+            const emptyOptionElement = document.createElement("option");
+            emptyOptionElement.value = "";
+            emptyOptionElement.innerText = "Select a deployment";
+            selectElement.appendChild(emptyOptionElement);
             deployments.forEach((deployment) => {
               const optionElement = document.createElement("option");
               optionElement.value = deployment.domains?.[0] ?? "";
@@ -147,25 +167,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
               selectElement.appendChild(optionElement);
             });
 
-            // Restore the selected deployment.
-            if (selectElementValue) {
-              selectElement.value = selectElementValue;
-
-              // Update the deployment domain.
-              if (selectElement.value !== deploymentDomain) {
-                setDeploymentDomain(selectElement.value);
-
-                // Update the iframe.
-                const iframeElement = outputPanelRef.current?.querySelector<
-                  HTMLIFrameElement
-                >("iframe.deployments-iframe");
-                const destination = `https://${selectElement.value}`;
-                if (iframeElement && iframeElement.src !== destination) {
-                  console.log(`Updating iframe to ${destination}`); // TODO: Fix polling.
-                  iframeElement.src = destination;
-                }
-              }
-            }
+            selectElement.value = value;
           }
         })
         .catch((error) => {
@@ -384,7 +386,6 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
               <select
                 onChange={handleDeploymentChange}
                 class="deployments"
-                value={deploymentDomain}
               >
               </select>
               <br />
@@ -392,18 +393,24 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
                 style="width: 100%; border-radius: 4px; padding: 0.5rem; background-color: #eee;"
                 class="deployments-address"
               >
-                <input type="text" value={deploymentDomain} readonly />
-                <input
-                  class="deployments-address-input"
-                  type="text"
-                  placeholder="/path/to/endpoint"
-                />{" "}
                 <button
                   style="color: black;"
                   onClick={handleRefreshIframeButtonClick}
                 >
                   Refresh
-                </button>
+                </button>{" "}
+                <input
+                  type="text"
+                  value={deploymentDomainRef.current ?? ""}
+                  placeholder="Select a deployment"
+                  class="deployments-domain-input"
+                  readonly
+                />
+                <input
+                  class="deployments-pathname-input"
+                  type="text"
+                  placeholder="/path/to/endpoint"
+                />
               </span>
               <br />
               <iframe
@@ -411,7 +418,11 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
                 class="deployments-iframe"
               />
             </details>
-            {/* TODO: Display section for defining environment variables. */}
+            <details open>
+              <summary>Logs</summary>
+              <pre class="logs"><code/></pre>
+            </details>
+            {/* Display section for defining environment variables. */}
           </div>
         </div>
       </main>

@@ -343,7 +343,7 @@ export interface SubhostingAPIGetDeploymentAppLogsOptions
   /**
    * Text to search for in log message.
    */
-  q: string;
+  q?: string;
 
   /**
    * Log level(s) to filter logs by.
