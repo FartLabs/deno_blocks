@@ -4,6 +4,8 @@
 
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
+import * as $api_projects_project_id_ from "./routes/api/projects/[project_id].ts";
+import * as $api_projects_index from "./routes/api/projects/index.ts";
 import * as $icon from "./routes/icon.tsx";
 import * as $index from "./routes/index.tsx";
 import * as $deno_blocks_ide_island from "./islands/deno_blocks_ide_island.tsx";
@@ -13,6 +15,8 @@ const manifest = {
   routes: {
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
+    "./routes/api/projects/[project_id].ts": $api_projects_project_id_,
+    "./routes/api/projects/index.ts": $api_projects_index,
     "./routes/icon.tsx": $icon,
     "./routes/index.tsx": $index,
   },

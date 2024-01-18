@@ -2,13 +2,9 @@ import { defineConfig } from "$fresh/server.ts";
 import { kvInsightsPlugin } from "deno_kv_insights/mod.ts";
 import { parse } from "boolean/mod.ts";
 import { kvOAuthPlugin } from "#/plugins/kv_oauth/mod.ts";
-import { denoBlocksAPIPlugin } from "#/plugins/deno_blocks_api/mod.ts";
 import { kv } from "#/lib/resources/kv.ts";
 
-const plugins = [
-  kvOAuthPlugin(),
-  denoBlocksAPIPlugin(),
-];
+const plugins = [kvOAuthPlugin()];
 
 const ENABLE_KV_INSIGHTS_KEY = "ENABLE_KV_INSIGHTS";
 let enableKvInsights = false;
