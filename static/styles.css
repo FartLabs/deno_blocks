@@ -187,20 +187,25 @@ dialog.menu hr {
 .landing__page {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: baseline;
+  justify-content: space-between;
   height: 100vh;
   margin: 0;
 }
 
 .landing__page__buttons {
   display: flex;
-  align-items: center;
-  justify-content: center;
   background: black;
   padding: 0.5em;
   border-radius: 3em;
-  margin-top: 2em;
+  /* margin-left: auto;
+  margin-top: auto; */
+}
+
+.landing__page__sourcecode {
+  display: flex;
+  align-items: end;
+  justify-content: end;
 }
 
 .landing__page__section {
@@ -284,17 +289,10 @@ dialog.menu hr {
   justify-content: center;
   align-items: center;
   text-align: center;
+  /* margin-bottom: auto; */
   width: 100%;
   background-color: gray;
   padding: 1em 0;
-}
-
-.landing__footer__text1 {
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center; */
 }
 
 /* Less than 1000px */
