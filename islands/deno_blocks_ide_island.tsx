@@ -28,27 +28,6 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
   // TODO: Load projects from Deno Kv by session ID.
   // https://github.com/denoland/subhosting_ide_starter/blob/main/main.tsx
   //
-
-  function handleEnvVarsChange(event: Event) {
-    const textareaElement = event.target as HTMLTextAreaElement;
-    const envVars = textareaElement.value
-      .split("\n")
-      .map((line) => line.split("="))
-      .reduce((acc, [key, value]) => {
-        if (!key) {
-          return acc;
-        }
-
-        return {
-          ...acc,
-          [key]: value,
-        };
-      }, {});
-
-    envVarsRef.current = envVars;
-    console.log("envVars", envVars);
-  }
-
   function handleIconClick() {
     const dialogElement = document.querySelector<HTMLDialogElement>(
       "dialog.menu",
@@ -438,15 +417,7 @@ export default function DenoBlocksIDEIsland(props: DenoBlocksIDEIslandProps) {
                 class="deployments-iframe"
               />
             </details>
-            <details class="environment-variables" open>
-              <summary>Environment variables</summary>
-              {/* TODO: Make this blurred out until the user clicks on it. */}
-              <textarea
-                class="environment-variables-textarea"
-                placeholder="KEY=value"
-                onChange={handleEnvVarsChange}
-              />
-            </details>
+            {/* TODO: Add environment variables textarea input. */}
           </div>
         </div>
       </main>
