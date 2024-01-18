@@ -59,6 +59,7 @@ const GET_DENO_BLOCKLY_TOOLBOX =
             },
           ],
         },
+        // Category ideas:
         // TODO: Add Kv watch category.
         // TODO: Add Kv queues category.
         // TODO: Add Discord category.
@@ -68,16 +69,14 @@ const GET_DENO_BLOCKLY_TOOLBOX =
   };
 
 const GET_DENO_BLOCKLY_BLOCKS = () => [
+  // Block ideas:
   // TODO: Create kv watch event block.
   // TODO: Create kv queue message event block.
-  // TODO: Create cron schedule event block.
   // TODO: Create function definition block.
   // TODO: Create call function block with drop down containing function names.
   // TODO: Create import block.
   // TODO: Create global variable assignment block.
   // TODO: Create kv definition block.
-  // TODO: Create HTTP request handler block.
-  // TODO: Deploy button.
 
   // HTTP blocks.
   {
