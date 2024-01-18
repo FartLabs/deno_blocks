@@ -32,14 +32,15 @@ export default async function IndexPage(request: Request) {
             </div>
           </div>
           <p class="landing__page__description">
-            Play with Deno Blocks, an IDE built with{" "}
+            Play with <strong>Deno Blocks</strong>, an <i>IDE</i> built with
+            {" "}
             <a href="https://github.com/denoland/fresh">Fresh</a> and{" "}
             <a href="https://github.com/google/blockly">Blockly</a> for the{" "}
             <a href="https://deno.com/blog/subhosting-hackathon">
               Deno Subhosting Hackathon
             </a>{" "}
-            that allows developers to play/access/move Deno's automatic
-            instrumentation and other powerful features.
+            that allows developers to drag-and-drop Deno's automatic
+            instrumentation.
           </p>
           {sessionID
             ? (
