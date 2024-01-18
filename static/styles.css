@@ -311,6 +311,11 @@ dialog.menu hr {
   text-decoration: none;
   color: white;
   font-size: 20px;
+  transition: font-size 0.3s ease;
+}
+
+.landing__page__signin:hover {
+  font-size: 22px;
 }
 
 .landing__page__openide {
@@ -319,12 +324,17 @@ dialog.menu hr {
   align-items: center;
   justify-content: center;
   background: black;
-  padding: 0.5em 1.5em;
+  padding: 1em;
   border-radius: 2em;
   margin: 1em 0;
   text-decoration: none;
   color: white;
   font-size: 20px;
+  transition: font-size 0.3s ease;
+}
+
+.landing__page__openide:hover {
+  font-size: 22px;
 }
 
 .landing__page__openide__text {
