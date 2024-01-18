@@ -2,6 +2,9 @@
 
 :root {
   --nav-height: 42px;
+  --background-color: #fff;
+  --text-color: #000;
+  --footer-background-color: #c2c2c2;
 }
 
 *,
@@ -45,6 +48,7 @@ html {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  background-color: var(--background-color);
 }
 
 .deno-blocks-icon {
@@ -193,6 +197,7 @@ dialog.menu hr {
   justify-content: space-between;
   height: 100vh;
   margin: 0;
+  background-color: var(--background-color);
 }
 
 .landing__page__buttons {
@@ -253,6 +258,7 @@ dialog.menu hr {
   margin: 0;
   font-family: "Inter", sans-serif;
   font-weight: 900;
+  color: var(--text-color);
 }
 
 .landing__page__logo {
@@ -264,6 +270,7 @@ dialog.menu hr {
   text-align: center;
   width: 50%;
   font-size: 20px;
+  color: var(--text-color);
 }
 
 .landing__page__image {
@@ -314,8 +321,9 @@ dialog.menu hr {
   align-items: center;
   text-align: center;
   width: 100%;
-  background-color: #c2c2c2;
+  background-color: var(--footer-background-color);
   padding: 1em 0;
+  color: var(--text-color);
 }
 
 /* Less than 1000px */
@@ -336,7 +344,6 @@ dialog.menu hr {
 
   /* Landing Page CSS Mobile*/
   .landing__page {
-    flex-direction: row;
     overflow-x: scroll;
   }
 }
@@ -352,4 +359,12 @@ pre span {
 
 pre span::before {
   content: counter(line) " ";
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #111;
+    --text-color: #fff;
+    --footer-background-color: #0a0a0a;
+  }
 }
