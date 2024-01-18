@@ -105,6 +105,22 @@ h3 {
   padding: 0;
 }
 
+a {
+  color: dodgerblue;
+}
+
+a:hover {
+  color: magenta;
+}
+
+a:visited {
+  color: rebeccapurple;
+}
+
+::selection {
+  color: green;
+}
+
 select,
 button {
   height: 28px;
@@ -343,6 +359,7 @@ dialog.menu hr {
     border-left: none;
   }
 
+  /* Landing Page CSS Mobile */
   .landing__page__section {
     flex-direction: column;
   }
@@ -362,6 +379,14 @@ dialog.menu hr {
   .landing__page__description {
     font-size: 16px;
     width: 70%;
+  }
+
+  .landing__page__signin {
+    margin-top: 0.5em;
+  }
+
+  .landing__page__openide {
+    margin-top: 0.5em;
   }
 }
 
