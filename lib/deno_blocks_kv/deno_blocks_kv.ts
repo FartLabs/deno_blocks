@@ -13,6 +13,7 @@ export interface DenoBlocksUser {
   githubUserID: string;
   githubUsername: string;
   projects: SubhostingAPIProject[];
+  createdAt: number;
 }
 
 export function makeDenoBlocksUser(
@@ -25,6 +26,7 @@ export function makeDenoBlocksUser(
     githubUserID,
     githubUsername,
     projects: [],
+    createdAt: Date.now(),
   };
 }
 
@@ -36,10 +38,19 @@ export interface CreateUserRequest {
 export interface AddSessionRequest {
   sessionID: string;
   userID: string;
+  expireIn?: number;
 }
 
-export interface GetUserBySessionIDRequest {
+export interface GetUserIDBySessionIDRequest {
   sessionID: string;
+}
+
+export interface GetUserByIDRequest {
+  id: string;
+}
+
+export interface GetUserByGitHubUserIDRequest {
+  githubUserID: string;
 }
 
 // Attention: Read projects by user's projects property.
@@ -52,6 +63,10 @@ export interface AddProjectRequest {
 export interface DeleteProjectRequest {
   userID: string;
   projectID: string;
+}
+
+export interface GetUserBySessionIDRequest {
+  sessionID: string;
 }
 
 /**
@@ -73,7 +88,7 @@ export class DenoBlocksKv {
     return [...this.kvKeyNamespace, ...key];
   }
 
-  public async createUser(request: CreateUserRequest): Promise<void> {
+  public async createUser(request: CreateUserRequest): Promise<DenoBlocksUser> {
     const usersByGitHubUserIDKey = this.k(
       DenoBlocksKvKeyPrefix.USERS_BY_GITHUB_USER_ID,
       request.githubUserID,
@@ -102,6 +117,8 @@ export class DenoBlocksKv {
     if (!result.ok) {
       throw new Error("Failed to create user");
     }
+
+    return user;
   }
 
   public async addSession(request: AddSessionRequest): Promise<void> {
@@ -121,16 +138,18 @@ export class DenoBlocksKv {
     );
     const result = await this.kv.atomic()
       .check(usersByIDResult)
-      .set(userIDsBySessionIDKey, user.id)
+      .set(userIDsBySessionIDKey, user.id, {
+        expireIn: request.expireIn ? request.expireIn * 1e3 : undefined,
+      })
       .commit();
     if (!result.ok) {
       throw new Error("Failed to add session");
     }
   }
 
-  public async getUserBySessionID(
-    request: GetUserBySessionIDRequest,
-  ): Promise<DenoBlocksUser | null> {
+  public async getUserIDBySessionID(
+    request: GetUserIDBySessionIDRequest,
+  ): Promise<string | null> {
     const userIDsBySessionIDKey = this.k(
       DenoBlocksKvKeyPrefix.USER_IDS_BY_SESSION_ID,
       request.sessionID,
@@ -138,16 +157,31 @@ export class DenoBlocksKv {
     const userIDsBySessionIDResult = await this.kv.get<string>(
       userIDsBySessionIDKey,
     );
-    if (!userIDsBySessionIDResult.value) {
-      return null;
-    }
+    return userIDsBySessionIDResult.value;
+  }
 
+  public async getUserByID(request: GetUserByIDRequest): Promise<
+    DenoBlocksUser | null
+  > {
     const usersByIDKey = this.k(
       DenoBlocksKvKeyPrefix.USERS_BY_ID,
-      userIDsBySessionIDResult.value,
+      request.id,
     );
     const usersByIDResult = await this.kv.get<DenoBlocksUser>(usersByIDKey);
     return usersByIDResult.value;
+  }
+
+  public async getUserByGitHubUserID(
+    request: GetUserByGitHubUserIDRequest,
+  ): Promise<DenoBlocksUser | null> {
+    const usersByGitHubUserIDKey = this.k(
+      DenoBlocksKvKeyPrefix.USERS_BY_GITHUB_USER_ID,
+      request.githubUserID,
+    );
+    const usersByGitHubUserIDResult = await this.kv.get<DenoBlocksUser>(
+      usersByGitHubUserIDKey,
+    );
+    return usersByGitHubUserIDResult.value;
   }
 
   public async addProject(request: AddProjectRequest): Promise<void> {
@@ -172,18 +206,10 @@ export class DenoBlocksKv {
   }
 
   public async getProjectsByUserID(userID: string): Promise<
-    SubhostingAPIProject[]
+    SubhostingAPIProject[] | null
   > {
-    const usersByIDKey = this.k(
-      DenoBlocksKvKeyPrefix.USERS_BY_ID,
-      userID,
-    );
-    const usersByIDResult = await this.kv.get<DenoBlocksUser>(usersByIDKey);
-    if (!usersByIDResult.value) {
-      throw new Error("User not found");
-    }
-
-    return usersByIDResult.value.projects;
+    const user = await this.getUserByID({ id: userID });
+    return user?.projects ?? null;
   }
 
   public async deleteProject(request: DeleteProjectRequest): Promise<void> {
@@ -207,5 +233,18 @@ export class DenoBlocksKv {
     if (!result.ok) {
       throw new Error("Failed to delete project");
     }
+  }
+
+  public async getUserBySessionID(request: GetUserBySessionIDRequest): Promise<
+    DenoBlocksUser | null
+  > {
+    const userID = await this.getUserIDBySessionID({
+      sessionID: request.sessionID,
+    });
+    if (!userID) {
+      return null;
+    }
+
+    return await this.getUserByID({ id: userID });
   }
 }

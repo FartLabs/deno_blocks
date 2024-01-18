@@ -29,6 +29,30 @@ export default function DenoBlocksIDEIsland() {
     dialogElement.showModal();
   }
 
+  function handleDeploymentChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const deploymentId = selectElement.value;
+    if (!deploymentId) {
+      return;
+    }
+
+    const iframeElement = outputPanelRef.current?.querySelector("iframe");
+    if (!iframeElement) {
+      return;
+    }
+
+    iframeElement.src = `https://${deploymentId}.deno.dev`;
+  }
+
+  function handleRefreshIframeButtonClick() {
+    const iframeElement = outputPanelRef.current?.querySelector("iframe");
+    if (!iframeElement?.contentWindow) {
+      return;
+    }
+
+    iframeElement.contentWindow.location.href = iframeElement.src;
+  }
+
   useEffect(() => {
     if (!blocklyRef.current) {
       throw new Error("blocklyRef.current is null");
@@ -125,6 +149,24 @@ export default function DenoBlocksIDEIsland() {
 
               <pre class="generated-code"><code ref={codeRef}/></pre>
             </details>
+            <details>
+              <summary>Deployments</summary>
+              <select onChange={handleDeploymentChange}>
+                <option />
+              </select>
+              <button
+                style="color: black;"
+                onClick={handleRefreshIframeButtonClick}
+              >
+                Refresh
+              </button>
+              <br />
+              <iframe
+                style="width: 100%; height: 50vh;"
+                src="http://example.com/"
+              />
+            </details>
+            {/* TODO: Display section for defining environment variables. */}
             {/* TODO: Display reloadable iframe of selectable deployment URL. */}
           </div>
         </div>
