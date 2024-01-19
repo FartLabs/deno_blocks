@@ -16,7 +16,7 @@ pieces to write code.
 ## Accolades
 
 **Ryan's favorite** (1st place) and **Most fun** at the
-[Deno Subhosting Hackathon](https://deno.com/blog/subhosting-hackathon#winning-submissions-1).
+[Deno Subhosting Hackathon](https://deno.com/blog/subhosting-hackathon#winning-submissions).
 
 ## Known issues/future work
 
