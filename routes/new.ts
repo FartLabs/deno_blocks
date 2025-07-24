@@ -1,7 +1,7 @@
-import { Handlers } from "$fresh/server.ts";
 import { getSessionId } from "deno_kv_oauth/mod.ts";
 import { createProject } from "#/lib/subhosting_api/mod.ts";
 import { denoBlocksKv } from "#/lib/resources/deno_blocks_kv.ts";
+import { Handlers } from "fresh/compat";
 
 const DEPLOY_ORG_ID = Deno.env.get("DEPLOY_ORG_ID")!;
 const DEPLOY_ACCESS_TOKEN = Deno.env.get("DEPLOY_ACCESS_TOKEN")!;

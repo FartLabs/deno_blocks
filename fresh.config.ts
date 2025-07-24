@@ -1,4 +1,4 @@
-import { defineConfig } from "$fresh/server.ts";
+import { defineConfig } from "fresh";
 import { kvInsightsPlugin } from "deno_kv_insights/mod.ts";
 import { parse } from "boolean/mod.ts";
 import { kvOAuthPlugin } from "#/plugins/kv_oauth/mod.ts";

@@ -4,9 +4,9 @@ import DenoBlocksIDEIsland from "#/islands/deno_blocks_ide_island.tsx";
 import { denoBlocksKv } from "#/lib/resources/deno_blocks_kv.ts";
 
 export default async function ProjectPage(
-  request: Request,
   context: FreshContext,
 ) {
+  const request = ctx.req;
   const projectID = context.params.project_id;
   if (!projectID) {
     return new Response("Not found", { status: 404 });

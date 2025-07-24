@@ -1,6 +1,6 @@
-import { Handlers } from "$fresh/server.ts";
 import { getSessionId } from "deno_kv_oauth/mod.ts";
 import { denoBlocksKv } from "#/lib/resources/deno_blocks_kv.ts";
+import { Handlers } from "fresh/compat";
 
 export const handler: Handlers = {
   async GET(request: Request) {

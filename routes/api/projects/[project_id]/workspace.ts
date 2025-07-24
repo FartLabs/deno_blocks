@@ -1,9 +1,11 @@
-import { FreshContext, Handlers } from "$fresh/server.ts";
+import { FreshContext } from "fresh";
 import { getSessionId } from "deno_kv_oauth/mod.ts";
 import { denoBlocksKv } from "#/lib/resources/deno_blocks_kv.ts";
+import { Handlers } from "fresh/compat";
 
 export const handler: Handlers = {
-  async GET(request: Request, context: FreshContext) {
+  async GET(context: FreshContext) {
+    const request = ctx.req;
     const projectID = context.params.project_id;
     if (!projectID) {
       return new Response("Expected project_id", { status: 400 });
@@ -34,7 +36,8 @@ export const handler: Handlers = {
       },
     );
   },
-  async POST(request: Request, context: FreshContext) {
+  async POST(context: FreshContext) {
+    const request = ctx.req;
     const projectID = context.params.project_id;
     if (!projectID) {
       return new Response("Expected project_id", { status: 400 });

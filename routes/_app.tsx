@@ -1,5 +1,5 @@
 import { useEffect } from "preact/hooks";
-import { type PageProps } from "$fresh/server.ts";
+import { type PageProps } from "fresh";
 
 export default function App(props: PageProps) {
   if (props.url.pathname.startsWith("/kv-insights/")) {

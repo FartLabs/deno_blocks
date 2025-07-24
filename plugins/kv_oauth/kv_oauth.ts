@@ -1,4 +1,4 @@
-import type { Plugin } from "$fresh/server.ts";
+import type { Plugin } from "fresh";
 import { WEEK } from "$fresh/src/dev/deps.ts";
 import { createGitHubOAuthConfig, createHelpers } from "deno_kv_oauth/mod.ts";
 import { getGitHubAPIUserByAccessToken } from "#/lib/github_api/mod.ts";
